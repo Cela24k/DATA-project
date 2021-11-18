@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component, useMemo} from 'react'
 import * as THREE from "three"
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls"
 
@@ -22,19 +22,25 @@ class ThreeScene extends Component{
             color: 0xf3f3f3,
             wireframe:true
         });
-        /*var material = new THREE.MeshPhongMaterial({
+        var mat_triangle = new THREE.MeshPhongMaterial({
             color: 'red',
-        })*/
+            wireframe:true
+        })
 
         this.cube = new THREE.Mesh(geometry,material);
+        this.triangle = new THREE.Mesh(new THREE.BoxGeometry(1,1,1) ,mat_triangle);
+
+        this.controls = new OrbitControls(this.camera,this.renderer.domElement);
+        this.controls.rotateSpeed = 0.25;
+        this.controls.enableDamping = true;
+        this.controls.dampingFactor = 0.001;
 
         this.scene.add( this.camera );
         this.scene.add(this.cube);
+        this.scene.add(this.triangle);
         this.scene.add(this.light);
         this.animation(); 
-        
-        new OrbitControls(this.camera,this.renderer.domElement);
-        
+
         this.renderer.render(this.scene,this.camera);
 
         window.addEventListener("resize",this.handleWindowResize1);
@@ -45,6 +51,12 @@ animation = ()=>{
     this.cube.rotation.x +=0.001
     this.cube.rotation.y +=0.0005
     this.renderer.render(this.scene,this.camera);
+    this.controls.update();
+}
+
+animateParticles = ()=> {
+    requestAnimationFrame(this.animateParticles);
+
 }
 
 handleWindowResize1= () => {
