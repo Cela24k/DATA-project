@@ -6,7 +6,9 @@ class ThreeScene extends Component{
     componentDidMount(){
         this.scene = new THREE.Scene();
         
-        this.renderer = new THREE.WebGLRenderer();
+        this.renderer = new THREE.WebGLRenderer({
+            antialias: true
+        });
         this.renderer.setSize(window.innerWidth, window.innerHeight);
 
         this.mount.appendChild(this.renderer.domElement);
@@ -31,9 +33,10 @@ class ThreeScene extends Component{
         this.triangle = new THREE.Mesh(new THREE.BoxGeometry(1,1,1) ,mat_triangle);
 
         this.controls = new OrbitControls(this.camera,this.renderer.domElement);
+        this.controls.enableZoom = false;
         this.controls.rotateSpeed = 0.25;
         this.controls.enableDamping = true;
-        this.controls.dampingFactor = 0.001;
+        this.controls.dampingFactor = 0.002;
 
         this.scene.add( this.camera );
         this.scene.add(this.cube);
