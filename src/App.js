@@ -36,8 +36,8 @@ const floatingText = {
   color: '#f3f3f3',
   position:'absolute',
   'zIndex': 1,
-  left: '120px',
-  top: '200px',
+  left: '20px',
+  top: '20px',
   width:'100px', 
   height:'20px',
   fontSize:'600%'
