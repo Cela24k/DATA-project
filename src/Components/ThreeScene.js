@@ -4,6 +4,7 @@ import {OrbitControls} from "three/examples/jsm/controls/OrbitControls"
 
 class ThreeScene extends Component{
     componentDidMount(){
+
         this.scene = new THREE.Scene();
         
         this.renderer = new THREE.WebGLRenderer({
@@ -36,7 +37,7 @@ class ThreeScene extends Component{
         this.controls.enableZoom = false;
         this.controls.rotateSpeed = 0.25;
         this.controls.enableDamping = true;
-        this.controls.dampingFactor = 0.002;
+        this.controls.dampingFactor = 0.1;
 
         this.scene.add( this.camera );
         this.scene.add(this.cube);
