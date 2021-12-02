@@ -1,12 +1,16 @@
-import React, {Component, useMemo} from 'react'
+import React, {Component} from 'react'
 import * as THREE from "three"
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls"
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 class ThreeScene extends Component{
     componentDidMount(){
 
+        this.loader = new GLTFLoader();
+
         this.scene = new THREE.Scene();
-        
+        this.scene.background = new THREE.Color(0xFFFFFF);
+
         this.renderer = new THREE.WebGLRenderer({
             antialias: true
         });
@@ -34,11 +38,24 @@ class ThreeScene extends Component{
         this.triangle = new THREE.Mesh(new THREE.BoxGeometry(1,1,1) ,mat_triangle);
 
         this.controls = new OrbitControls(this.camera,this.renderer.domElement);
-        this.controls.enableZoom = false;
+        //this.controls.enableZoom = false;
+        
         this.controls.rotateSpeed = 0.25;
         this.controls.enableDamping = true;
         this.controls.dampingFactor = 0.1;
 
+
+        this.loader.load( 'SuperG2.glb', ( gltf ) => {
+            
+            this.scene.add(gltf.scene)
+        
+        }, undefined, function ( error ) {
+        
+            console.error( error );
+        
+        } );
+
+        
         this.scene.add( this.camera );
         this.scene.add(this.cube);
         this.scene.add(this.triangle);
@@ -60,7 +77,6 @@ animation = ()=>{
 
 animateParticles = ()=> {
     requestAnimationFrame(this.animateParticles);
-
 }
 
 handleWindowResize1= () => {
