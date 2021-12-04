@@ -22,24 +22,53 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
+//TODO mettere grassetto
+
 function App() {
   return (
     <div className="App">
-      <div style={floatingText}>Ciao.</div> 
+      <div style={floatingText}>
+        
+        <h1>Data </h1>
+        <a href="work" style={link}>Work</a>
+        <b style ={link}>/</b>
+        <a href="info" style={link}>Info</a>
+        <b style ={link}>/</b>
+        <a href="contact" style={link}>Contact</a>
+        
+      </div> 
+         
+
+      
       <ThreeScene/>
     </div>
     
   );
 }
 
+const link = {
+  "color":"white",
+  "text-decoration": "none",
+  fontSize:"40px"
+}
 const floatingText = {
   color: '#f3f3f3',
   position:'absolute',
   'zIndex': 1,
-  left: '20px',
-  top: '20px',
+  left: '30px',
+  top: '30px',
   width:'100px', 
   height:'20px',
-  fontSize:'600%'
+  fontSize:'24px',
+  "line-height":'0.2'
+}
+const bottomText = {
+  color: '#f3f3f3',
+  position:'absolute',
+  'zIndex': 1,
+  left: '30px',
+  top: '60px',
+  fontSize:'24px%'
+
 }
 export default App;
