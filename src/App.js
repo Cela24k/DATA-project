@@ -20,21 +20,18 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
-//TODO mettere grassetto
+const width = window.screen.width
 function App() {
   return (
     <div className="App">
-      <div style={floatingText}>
-        
-        <h1>DATA</h1>
+      <div style={floatingText}> 
+        <h1 className="titolo">DATA</h1>
         <h2>
-          <a href="work" style={link}>Work</a>/
+          <a href="work" style={link} >Work</a>/
           <a href="info" style={link}>Info</a>/
           <a href="contact" style={link}>Contact</a>
         </h2>
       </div> 
-         
-
       <ThreeScene/>
     </div>
     
@@ -43,19 +40,19 @@ function App() {
 
 const link = {
   "color":"white",
-  "text-decoration": "none",
-  fontSize:"110%"
+  "textDecoration": "none",
 }
 const floatingText = {
   color: '#f3f3f3',
   position:'absolute',
   'zIndex': 1,
-  left: '30px',
-  top: '30px',
-  width:'100px', 
-  height:'20px',
-  fontSize:'24px',
+  left: '1rem',
+  top: '1rem',
+  width:"fit-content", 
+  height:'fit-content',
+  fontSize: width/80+15,
   fontWeight:'bolder',
-  "line-height":'0.2'
+  "lineHeight":'0.1rem'
 }
+
 export default App;

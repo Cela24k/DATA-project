@@ -1,16 +1,16 @@
 import * as THREE from "three"
 import React, { Component } from 'react'
-import { BoxGeometry } from 'three';
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { DoubleSide } from "three";
 //import { RGBELoader } from "three/examples/js/loaders/RGBELoader.js"
 
 class ThreeScene extends Component {
 
     componentDidMount() {
-        this.loader = new GLTFLoader();
+        this.objects = [];
 
-        this.matrix = [];
+        this.loader = new GLTFLoader();
 
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color(0x000000);
@@ -18,21 +18,19 @@ class ThreeScene extends Component {
         this.renderer = new THREE.WebGLRenderer({
             antialias: true
         });
-
         this.renderer.setSize(window.innerWidth, window.innerHeight);
 
         this.mount.appendChild(this.renderer.domElement);
 
         this.camera = new THREE.PerspectiveCamera(75, window.innerHeight / window.innerWidth, 0.1, 1000);
-        this.camera.position.z = 0.4;
-        this.camera.position.y = 0.7;
-        this.camera.rotation.x += 150;
-        this.camera.rotation.y -= 150;
+        this.camera.position.x = 6.5;
+        this.camera.position.y = 0.1;
+        this.camera.rotation.x += 0;
+        this.camera.rotation.y -= 0;
 
-        this.light = new THREE.AmbientLight(0x404040, 1);
+        this.light = new THREE.AmbientLight("white", 1);
 
         window.addEventListener("load", this.handleWindowResize1());
-
         var geometry = new THREE.BoxGeometry(2, 2, 2);
         var material = new THREE.MeshBasicMaterial({
             color: 0xf3f3f3,
@@ -49,27 +47,20 @@ class ThreeScene extends Component {
         this.triangle.rotation.y = Math.floor(Math.random() * 620) / 100;
 
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-        this.controls.enableZoom = false;
 
+        //this.controls.enableZoom = false;
         this.controls.rotateSpeed = 0.25;
         this.controls.enableDamping = true;
         this.controls.dampingFactor = 0.1;
 
-        /*
-        this.loader.load( 'SuperG2.glb', ( gltf ) => {
-            
-            this.scene.add(gltf.scene)
-        
-        }, undefined, function ( error ) {
-        
-            console.error( error );
-        
-        } );*/
-        this.loadModels()
+
+        this.loadCards()
         this.envLight()
         this.scene.add(this.camera);
-        this.scene.add(this.cube);
-        this.scene.add(this.triangle);
+        this.camera.add(this.cube)
+        this.camera.add(this.triangle)
+        //this.scene.add(this.cube);
+        //this.scene.add(this.triangle);
         this.scene.add(this.light);
         this.animation();
 
@@ -78,67 +69,76 @@ class ThreeScene extends Component {
         window.addEventListener("resize", this.handleWindowResize1);
     }
 
+    //FINE PREAMBOLO
+
+    //Fare in modo che la carta piu vicina si avvicini ulteriormente quando premuta e possa venire ruotata
+    //fare in modo che le carte guardino la camera
+    loadCards() {
+        const loader = new THREE.TextureLoader();
+        const geometry = new THREE.PlaneBufferGeometry(1, 1, 1, 1)
+        const scene = this.scene
+        const obj = this.objects
+
+        //todo fare con ogni file della cartella
+        const count = 20;
+
+        for (let i = 0; i < count; i++) {    
+            loader.load(
+                "nfts/test_image"+i.toString()+".png",
+                function (texture) {
+                    const material = new THREE.MeshBasicMaterial({
+                        color: "white",
+                        map: texture,
+                        side: THREE.DoubleSide
+                    });
+                    console.log(texture)
+                    const mesh = new THREE.Mesh(geometry, material);
+
+                    const t = i / count * 2 * Math.PI;
+
+                    mesh.position.x = Math.cos(t) * 4;
+                    mesh.position.z = Math.sin(t) * 4;
+                    scene.add(mesh);
+                    obj.push(mesh);
+                },
+                undefined,
+                function (err) {
+                    console.error('An error happened.');
+                }
+            )
+
+            
+        }
+    }
+    deprecatedModels() {
+        this.loader.load('SuperG2.glb', (gltf) => {
+
+            gltf.scene.scale.set(0.1, 0.1, 0.1)
+            this.scene.add(gltf.scene)
+
+        }, undefined, function (error) {
+
+            console.error(error);
+
+        });
+        this.loadModels()
+    }
     envLight() {
-        this.dlight = new THREE.DirectionalLight(0x95a4b3, 15);
+        //this.dlight = new THREE.DirectionalLight(0x95a4b3, 15);
+        this.dlight = new THREE.AmbientLight("white", 1);
         this.dlight.position.set(0, 0, 1);
         this.dlight.castShadow = true;
         this.scene.add(this.dlight)
     }
-    /*
-    loadChains() {
 
-        for (let index = 0; index < 100; index++) {
-            this.loader.load("chain/scene.gltf", (gltf) => {
+    lookAtCamera()
+    {
+        const objects = this.objects
+        const camera = this.camera;
 
-                const dragon = gltf.scene.children.find((mesh) => mesh.name === "chain_Spikes_modelling");
-                //const dragon = gltf.scene.children.pop()
-
-                // Just copy the geometry from the loaded model
-                const geometry = dragon.geometry.clone();
-                //const geometry = dragon.clone();
-
-                // Adjust geometry to suit our scene
-                geometry.rotateX(Math.PI / 2);
-                geometry.translate(0, -4, 0);
-
-                // Create a new mesh and place it in the scene
-                const mesh = new THREE.Mesh(geometry, material);
-                mesh.scale.set(0.0135, 0.0135, 0.0135);
-                mesh.position.x = Math.floor(Math.random() * 100) / 100
-                mesh.position.y = Math.floor(Math.random() * 100) / 100
-                mesh.position.z = Math.floor(Math.random() * 100) / 100
-                this.scene.add(mesh);
-
-
-                // Discard the model
-                dragon.geometry.dispose();
-                dragon.material.dispose();
-            }, undefined, function (error) {
-
-                console.error(error);
-
-            });
-        }
-    }
-    */
-
-    loadModels(){
-        for (let i = 0; i < 16; i++) {
-            this.loader.load('chain/scene.gltf', (gltf) => {
-                this.chain=gltf.scene.clone()
-                this.scene.add(gltf.scene)
-                gltf.scene.scale.set(0.03,0.03,0.03)
-                gltf.scene.traverse( child => {
-                    if ( child.material ) child.material = material;
-                });
-                gltf.scene.position.x = Math.floor(Math.random() * 50) / 100;
-                gltf.scene.position.y = Math.floor(Math.random() * 50) / 100;
-                gltf.scene.position.z = Math.floor(Math.random() * 50) / 100;
-                gltf.scene.rotation.set(Math.floor(Math.random() * 600) / 100,Math.floor(Math.random() * 200) / 100,Math.floor(Math.random() * 500) / 100)
-            }, undefined, function (error) {
-                console.error(error);
-            })
-        }
+        objects.forEach(function(obj){
+            obj.lookAt(camera.position)
+        })
     }
 
     animation = () => {
@@ -148,6 +148,7 @@ class ThreeScene extends Component {
         this.triangle.rotation.x -= 0.001
         this.triangle.rotation.y -= 0.0005
         this.renderer.render(this.scene, this.camera);
+        this.lookAtCamera()
         this.controls.update();
 
     }
@@ -172,19 +173,9 @@ class ThreeScene extends Component {
     }
 }
 
-
-/*
-const hdrEquirect = new RGBELoader().load(
-    "src/empty_warehouse_01_2k.hdr",  
-    () => { 
-      hdrEquirect.mapping = THREE.EquirectangularReflectionMapping; 
-    }
-);
-*/
-
 const material = new THREE.MeshPhysicalMaterial({
-    roughness: 0,   
-    transmission: 1,  
+    roughness: 0,
+    transmission: 1,
     thickness: 0.5
 });
 
