@@ -42,6 +42,8 @@ const link = {
   "color":"white",
   "textDecoration": "none",
 }
+
+//da guardare
 const floatingText = {
   color: '#f3f3f3',
   position:'absolute',
@@ -50,7 +52,7 @@ const floatingText = {
   top: '1rem',
   width:"fit-content", 
   height:'fit-content',
-  fontSize: width/80+15,
+  fontSize: width/80+5,
   fontWeight:'bolder',
   "lineHeight":'0.1rem'
 }
