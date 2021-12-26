@@ -228,7 +228,7 @@ class ThreeScene extends Component {
     render() {
         return (
             <div>
-                <div style={infoStyle}> {this.text} </div>
+                <div style={infoStyle}> {this.state.infoText} </div>
                 <div
                     ref={mount => {
                         this.mount = mount;
