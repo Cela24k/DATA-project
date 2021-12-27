@@ -12,10 +12,12 @@ class ThreeScene extends Component {
         super();
         this.state = {
             moving: true,
+            translated:false,
             selected: 0,
             infoText: "ciao",
-        }
+        };
     }
+
     componentDidMount() {
 
         this.objects = [];
@@ -54,7 +56,6 @@ class ThreeScene extends Component {
 
         this.deprecatedModels();
         this.loadCards()
-        this.flip90()
         this.addPlane()
 
         this.envLight()
@@ -69,6 +70,7 @@ class ThreeScene extends Component {
 
     //FINE PREAMBOLO
 
+    //mouseListener che si attiva quando premi su una carta per ruotare l'oggetto 
     //MeshPhysicalMaterial clearcoat effetto shiny
 
     //logo che cade dall'alto; logo che gira 
@@ -79,6 +81,13 @@ class ThreeScene extends Component {
     //Fare in modo che venga fuori il nome del file selezionato in alto a dx
     //Fare in modo che la carta piu vicina si avvicini ulteriormente quando premuta e possa venire ruotata
     
+    setStateStopped()
+    {
+        this.setState({
+            moving: this.state.moving ? false : true,
+        })
+    }
+
     loadCards() {
         const loader = new THREE.TextureLoader();
         const geometry = new THREE.PlaneBufferGeometry(1, 1, 1, 1)
@@ -109,14 +118,19 @@ class ThreeScene extends Component {
         const mesh = new THREE.Mesh(geometry, material);
         const t = i / count * 2 * Math.PI;
 
+        mesh.name="nfts/test_image" + i.toString() + ".png"        
         mesh.position.x = Math.cos(t) * 4;
         mesh.position.z = Math.sin(t) * 4;
         scene.add(mesh);
         int.add(mesh)
         mesh.addEventListener("click", (event) => {
-            this.setState({
-                moving: this.state.moving ? false : true,
-            })
+            if (event.distance < 3.5)
+            {
+                this.setState({
+                    moving: this.state.moving ? false : true,
+                    translated: this.state.translated ? false : true,
+                })
+            }
             event.stopPropagation()
         }
         );
@@ -146,6 +160,7 @@ class ThreeScene extends Component {
         this.scene.add(this.glass)
         this.scene.add(this.plane)
     }
+    
     deprecatedModels() {
         this.loader.load('SuperG2.glb', (gltf) => {
             gltf.scene.scale.set(1, 1, 1)
@@ -174,7 +189,7 @@ class ThreeScene extends Component {
         })
     }
 
-    flip90() {
+    processClosest() {
         const objects = this.objects
         const camera = this.camera;
         var selected = 0;
@@ -191,8 +206,11 @@ class ThreeScene extends Component {
         try {
             if (objects.at(selected)) {
                 objects.at(selected).rotation.z += Math.PI;
-                this.setState({ infoText: selected })
-                console.log(this.state.infoText)
+                this.setState({ infoText: objects.at(selected).name })
+                /*
+                if(this.state.moving === false)
+                    objects.at(selected).position.set(1,1,1)
+                */
             }
         }
         catch (error) {
@@ -207,7 +225,7 @@ class ThreeScene extends Component {
         this.controls.autoRotateSpeed = -0.4
 
         this.lookAtCamera();
-        this.flip90();
+        this.processClosest();
 
         this.interaction.update();
         this.controls.update();
@@ -256,6 +274,7 @@ const infoStyle = {
     zIndex: 1,
     position: 'absolute',
     color: "white",
-    top: "10rem"
+    top: "6rem",
+    left:"60%"
 }
 export default ThreeScene;
