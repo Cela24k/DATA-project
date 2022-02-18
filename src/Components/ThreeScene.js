@@ -11,6 +11,7 @@ class ThreeScene extends Component {
     constructor() {
         super();
         this.state = {
+            intro:true,
             moving: true,
             translated:false,
             selected: 0,
@@ -32,7 +33,8 @@ class ThreeScene extends Component {
         this.mount.appendChild(this.renderer.domElement);
         this.camera = new THREE.PerspectiveCamera(50, window.innerHeight / window.innerWidth, 0.1, 1000);
         this.camera.position.x = 7.2;
-        this.camera.position.y = 0.5;
+        //this.camera.position.y = 0.5;
+        this.camera.position.y = 10;
         this.camera.rotation.x += 0;
         this.camera.rotation.y -= 0;
 
@@ -42,7 +44,7 @@ class ThreeScene extends Component {
             this.renderer.domElement
         );
 
-        this.light = new THREE.AmbientLight("white", 1);
+        //this.light = new THREE.AmbientLight("white", 1);
 
         window.addEventListener("load", this.handleWindowResize1());
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
@@ -51,8 +53,8 @@ class ThreeScene extends Component {
         this.controls.rotateSpeed = 0.25;
         this.controls.enableDamping = true;
         this.controls.dampingFactor = 0.1;
-        this.controls.minPolarAngle = Math.PI / 2 - 0.2;
-        this.controls.maxPolarAngle = Math.PI / 2;
+        //this.controls.minPolarAngle = Math.PI / 2 - 0.2;
+        //this.controls.maxPolarAngle = Math.PI / 2;
 
         this.deprecatedModels();
         this.loadCards()
@@ -73,12 +75,12 @@ class ThreeScene extends Component {
     //mouseListener che si attiva quando premi su una carta per ruotare l'oggetto 
     //MeshPhysicalMaterial clearcoat effetto shiny
 
+    
+    //Sfocatura gaussiana sulle carte dietro
     //logo che cade dall'alto; logo che gira 
     //aggiungere logo che gira in mezzo al cerchio di carte
-    //aggiugere radio in mezzo alle carte
     //provare ad aggiungere il fade dello sfondo
     //fare animazione in entrata delle carte
-    //Fare in modo che venga fuori il nome del file selezionato in alto a dx
     //Fare in modo che la carta piu vicina si avvicini ulteriormente quando premuta e possa venire ruotata
     
     setStateStopped()
@@ -95,11 +97,11 @@ class ThreeScene extends Component {
         const obj = this.objects
         const int = this.interaction
         //todo fare con ogni file della cartella
-        const count = 20;
+        const count = 12;
 
         for (let i = 0; i < count; i++) {
             loader.load(
-                "nfts/test_image" + i.toString() + ".png",
+                "nfts/" + i.toString() + ".jpg",
                 (texture) => this.loadElement(texture,scene,int,obj,i,count,geometry),
                 undefined,
                 function (err) {
@@ -124,7 +126,7 @@ class ThreeScene extends Component {
         scene.add(mesh);
         int.add(mesh)
         mesh.addEventListener("click", (event) => {
-            if (event.distance < 3.5)
+            if (event.distance < 3.3)
             {
                 this.setState({
                     moving: this.state.moving ? false : true,
@@ -218,11 +220,32 @@ class ThreeScene extends Component {
         }
     }
 
+    splash(){
+        if(this.camera.position.y > 0.5)
+        {   
+            this.camera.position.y -= 0.04;
+            this.camera.position.x -= 0.06;
+        }
+        else
+        {
+            this.controls.maxPolarAngle = Math.PI / 2;
+            this.setState({intro:false});
+        }
+    }
+
+    menu(){
+        this.controls.autoRotate = this.state.moving;
+        this.controls.autoRotateSpeed = -0.4
+    }
+
     animation = () => {
         requestAnimationFrame(this.animation);
         this.renderer.render(this.scene, this.camera);
-        this.controls.autoRotate = this.state.moving;
-        this.controls.autoRotateSpeed = -0.4
+        
+        if(this.state.intro)
+            this.splash();
+        else 
+            this.menu();
 
         this.lookAtCamera();
         this.processClosest();
@@ -243,10 +266,12 @@ class ThreeScene extends Component {
         this.renderer.render(this.scene, this.camera);
     }
 
+    
     render() {
         return (
             <div>
-                <div style={infoStyle}> {this.state.infoText} </div>
+                <div style={infoStyle}>
+                {this.state.infoText} </div>
                 <div
                     ref={mount => {
                         this.mount = mount;
@@ -275,6 +300,11 @@ const infoStyle = {
     position: 'absolute',
     color: "white",
     top: "6rem",
-    left:"60%"
+    left:"60%",
+    "user-select": "none",
+    "-moz-user-select": "none",
+    "-khtml-user-select": "none",
+    "-webkit-user-select": "none",
+    "-o-user-select": "none"
 }
 export default ThreeScene;

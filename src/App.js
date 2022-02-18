@@ -21,11 +21,12 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 const width = window.screen.width
+
 function App() {
   return (
     <div className="App">
       <div style={floatingText}> 
-        <h1 className="titolo">DATA</h1>
+        <h1>Home</h1>
         <h2>
           <a href="work" style={link} >Work</a>/
           <a href="info" style={link}>Info</a>/
@@ -43,6 +44,9 @@ const link = {
   "textDecoration": "none",
 }
 
+const alignRight = {
+  textAlign: "right"
+}
 //da guardare
 const floatingText = {
   color: '#f3f3f3',
@@ -55,6 +59,7 @@ const floatingText = {
   fontSize: width/80+5,
   fontWeight:'bolder',
   "lineHeight":'0.1rem'
+  
 }
 
 export default App;
