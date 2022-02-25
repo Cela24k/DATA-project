@@ -25,23 +25,33 @@ const width = window.screen.width
 function App() {
   return (
     <div className="App">
-      <div style={floatingText}> 
-        <h1>Home</h1>
-        <h2>
-          <a href="work" style={link} >Work</a>/
-          <a href="info" style={link}>Info</a>/
-          <a href="contact" style={link}>Contact</a>
-        </h2>
-      </div> 
-      <ThreeScene/>
+      <div style={banner}>
+        <img src='media/data.png' alt="non caricata" width="188" height="80" ></img>
+        <div style={sections}>
+          <nav>
+            <ul style={lista}>
+              <li><a style={link} href="soundtrack">DT soundtrack</a></li>
+              <li> <a style={link} href="nfts">NFTs</a></li>
+              <li> <a style={link} href="clothing">Clothing</a></li>
+              <li> <a style={link} href="work">Work</a></li>
+              <li> <a style={link} href="info">Info</a></li>
+            </ul>
+          </nav>
+        </div>
+        <div style={sections}>
+          <img src='media/02.png' alt="non caricata" width="30" height="30" ></img>
+        </div>
+      </div>
+      <ThreeScene />
     </div>
-    
+
   );
 }
 
 const link = {
-  "color":"white",
-  "textDecoration": "none",
+  color: "white",
+  textDecoration: "none",
+  marginRight:"1rem",
 }
 
 const alignRight = {
@@ -50,16 +60,35 @@ const alignRight = {
 //da guardare
 const floatingText = {
   color: '#f3f3f3',
-  position:'absolute',
+  position: 'absolute',
   'zIndex': 1,
-  left: '1rem',
-  top: '1rem',
-  width:"fit-content", 
-  height:'fit-content',
-  fontSize: width/80+5,
-  fontWeight:'bolder',
-  "lineHeight":'0.1rem'
-  
+  left: '7rem',
+  top: '3rem',
+  width: "fit-content",
+  height: 'fit-content',
+
 }
 
+const lista = {
+  display:"flex",
+  listStyle:"none", 
+  padding:"0rem"
+}
+const sections = {
+  color: "white",
+  width: "fit-content",
+  fontWeight: "lighter",
+  display: "flex",
+}
+
+const banner = {
+  position: 'absolute',
+  'zIndex': 1,
+  width: "82%",
+  alignItems: "end",
+  display: "flex",
+  padding: "3rem",
+  justifyContent: "space-evenly",
+
+}
 export default App;

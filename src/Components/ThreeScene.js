@@ -11,7 +11,7 @@ class ThreeScene extends Component {
     constructor() {
         super();
         this.state = {
-            intro:true,
+            intro:0,
             moving: true,
             translated:false,
             selected: 0,
@@ -20,15 +20,17 @@ class ThreeScene extends Component {
     }
 
     componentDidMount() {
+        var ref = this;
 
         this.objects = [];
         this.loader = new GLTFLoader();
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0x000000);
         this.renderer = new THREE.WebGLRenderer({
-            antialias: true
+            antialias: true,
+            alpha:true
         });
-
+        this.renderer.autoClear=false;
+        this.renderer.setClearColor(0x000000, 0.0);
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.mount.appendChild(this.renderer.domElement);
         this.camera = new THREE.PerspectiveCamera(50, window.innerHeight / window.innerWidth, 0.1, 1000);
@@ -44,9 +46,11 @@ class ThreeScene extends Component {
             this.renderer.domElement
         );
 
-        //this.light = new THREE.AmbientLight("white", 1);
-
         window.addEventListener("load", this.handleWindowResize1());
+        window.addEventListener("keypress", () => this.setState({
+            intro:2,
+        }));
+
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
         this.controls.enableZoom = false;
@@ -56,9 +60,9 @@ class ThreeScene extends Component {
         //this.controls.minPolarAngle = Math.PI / 2 - 0.2;
         //this.controls.maxPolarAngle = Math.PI / 2;
 
-        this.deprecatedModels();
-        this.loadCards()
-        this.addPlane()
+        //this.deprecatedModels();
+        this.loadCards();
+        this.addPlane();
 
         this.envLight()
         this.scene.add(this.camera);
@@ -72,21 +76,28 @@ class ThreeScene extends Component {
 
     //FINE PREAMBOLO
 
-    //mouseListener che si attiva quando premi su una carta per ruotare l'oggetto 
+    //mouseListener che si attiva quando premi su una carta per ruotare l'oggetto
     //MeshPhysicalMaterial clearcoat effetto shiny
 
-    
+
     //Sfocatura gaussiana sulle carte dietro
-    //logo che cade dall'alto; logo che gira 
+    //logo che cade dall'alto; logo che gira
     //aggiungere logo che gira in mezzo al cerchio di carte
     //provare ad aggiungere il fade dello sfondo
     //fare animazione in entrata delle carte
     //Fare in modo che la carta piu vicina si avvicini ulteriormente quando premuta e possa venire ruotata
-    
+
     setStateStopped()
     {
         this.setState({
             moving: this.state.moving ? false : true,
+        })
+    }
+
+    setThird()
+    {
+        this.setState({
+            intro:2,
         })
     }
 
@@ -97,7 +108,7 @@ class ThreeScene extends Component {
         const obj = this.objects
         const int = this.interaction
         //todo fare con ogni file della cartella
-        const count = 12;
+        const count = 20;
 
         for (let i = 0; i < count; i++) {
             loader.load(
@@ -120,7 +131,7 @@ class ThreeScene extends Component {
         const mesh = new THREE.Mesh(geometry, material);
         const t = i / count * 2 * Math.PI;
 
-        mesh.name="nfts/test_image" + i.toString() + ".png"        
+        mesh.name="nfts/test_image" + i.toString() + ".png"
         mesh.position.x = Math.cos(t) * 4;
         mesh.position.z = Math.sin(t) * 4;
         scene.add(mesh);
@@ -140,8 +151,8 @@ class ThreeScene extends Component {
     }
 
     addPlane() {
-        var planeGeometry = new THREE.PlaneBufferGeometry(15, 15)
-        var glass = new THREE.PlaneBufferGeometry(15, 15, 100, 100)
+        var planeGeometry = new THREE.PlaneBufferGeometry(30, 30)
+        var glass = new THREE.PlaneBufferGeometry(30, 30, 100, 100)
         this.glass = new Mesh(glass, planeMat)
         planeMat.transparent = true;
 
@@ -152,7 +163,6 @@ class ThreeScene extends Component {
             color: "0x777777",
             recursion: 4,
             antialias: true,
-
         })
 
         this.glass.position.y -= 0.499
@@ -162,7 +172,7 @@ class ThreeScene extends Component {
         this.scene.add(this.glass)
         this.scene.add(this.plane)
     }
-    
+
     deprecatedModels() {
         this.loader.load('SuperG2.glb', (gltf) => {
             gltf.scene.scale.set(1, 1, 1)
@@ -220,16 +230,27 @@ class ThreeScene extends Component {
         }
     }
 
+    schermata(){
+        this.controls.autoRotate = false;
+
+        if(this.camera.position.y > -5)
+        {
+            this.controls.target.y -=0.03;
+            this.camera.position.y -= 0.03;
+            this.camera.position.x -= 0.06;  
+        }
+    }
+
     splash(){
         if(this.camera.position.y > 0.5)
-        {   
+        {
             this.camera.position.y -= 0.04;
             this.camera.position.x -= 0.06;
         }
         else
         {
             this.controls.maxPolarAngle = Math.PI / 2;
-            this.setState({intro:false});
+            this.setState({intro:1});
         }
     }
 
@@ -241,11 +262,13 @@ class ThreeScene extends Component {
     animation = () => {
         requestAnimationFrame(this.animation);
         this.renderer.render(this.scene, this.camera);
-        
-        if(this.state.intro)
+
+        if(this.state.intro === 0)
             this.splash();
-        else 
+        else if(this.state.intro === 1)
             this.menu();
+        else if(this.state.intro === 2)
+            this.schermata();
 
         this.lookAtCamera();
         this.processClosest();
@@ -266,12 +289,12 @@ class ThreeScene extends Component {
         this.renderer.render(this.scene, this.camera);
     }
 
-    
+
     render() {
         return (
             <div>
                 <div style={infoStyle}>
-                {this.state.infoText} </div>
+                {/*this.state.infoText*/} </div>
                 <div
                     ref={mount => {
                         this.mount = mount;
@@ -301,10 +324,10 @@ const infoStyle = {
     color: "white",
     top: "6rem",
     left:"60%",
-    "user-select": "none",
-    "-moz-user-select": "none",
-    "-khtml-user-select": "none",
-    "-webkit-user-select": "none",
-    "-o-user-select": "none"
+    "userSelect": "none",
+    "MozUserSelect": "none",
+    "KhtmlUserSelect": "none",
+    "WebkitUserSelect": "none",
+    "OuserSelect": "none"
 }
 export default ThreeScene;
