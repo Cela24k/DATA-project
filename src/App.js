@@ -2,6 +2,7 @@ import { initializeApp } from "firebase/app"
 import React from "react"
 import "./App.css"
 import ThreeScene from "./Components/ThreeScene"
+import Music from "./Components/Music"
 /*
 import { Canvas, useFrame } from '@react-three/fiber'
 import { useSpring, animated } from 'react-spring'
@@ -25,9 +26,9 @@ const width = window.screen.width
 function App() {
   return (
     <div className="App">
-      <div style={banner}>
-        <img src='media/data.png' alt="non caricata" width="188" height="80" ></img>
-        <div style={sections}>
+      <div className="banner">
+        <img src='media/data.png' alt="data" width="188" height="80" ></img>
+        <div className="section">
           <nav>
             <ul style={lista}>
               <li><a style={link} href="soundtrack">DT soundtrack</a></li>
@@ -38,53 +39,65 @@ function App() {
             </ul>
           </nav>
         </div>
-        <div style={sections}>
-          <img src='media/02.png' alt="non caricata" width="30" height="30" ></img>
+        <div style={logo}>  
+          <img src='media/02.png' alt="logo" width="30" height="30" ></img>
         </div>
       </div>
+
+      <div className="greetings">
+      <div style={{marginTop:"100px"}}></div>
+        You have entered DATA,<br></br>
+        your personal space
+      </div>
+
       <ThreeScene />
+      {/*<ThreeScene />*/}
+      
+      
+      {/*<Music />*/}
+
     </div>
 
   );
 }
 
+const greetings = {
+  top: "700px",
+  position: "absolute",
+  color: "white",
+  width: "100%",
+  whiteSpace: "pre-line",
+  fontSize: "42px",
+  textAlign: "center",
+  paddingTop: "15rem",
+  paddingBottom: "25rem"
+}
+
 const link = {
   color: "white",
   textDecoration: "none",
-  marginRight:"1rem",
-}
-
-const alignRight = {
-  textAlign: "right"
-}
-//da guardare
-const floatingText = {
-  color: '#f3f3f3',
-  position: 'absolute',
-  'zIndex': 1,
-  left: '7rem',
-  top: '3rem',
-  width: "fit-content",
-  height: 'fit-content',
-
+  marginRight: "0.5rem",
+  marginLeft:"0.5rem"
 }
 
 const lista = {
-  display:"flex",
-  listStyle:"none", 
-  padding:"0rem"
-}
-const sections = {
-  color: "white",
-  width: "fit-content",
-  fontWeight: "lighter",
   display: "flex",
+  listStyle: "none",
+}
+
+const logo = {
+  display: "flex",
+  listStyle: "none",
+  width: "188px",
+  padding: "0rem"
 }
 
 const banner = {
   position: 'absolute',
   'zIndex': 1,
-  width: "82%",
+  width:'100vw',
+  //width: "92%",
+  //height:"200%",
   alignItems: "end",
   display: "flex",
   padding: "3rem",

@@ -5,7 +5,6 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { Reflector } from "three/examples/jsm/objects/Reflector"
 import { Mesh } from "three";
 import { InteractionManager, InteractiveEvent } from "three.interactive";
-
 class ThreeScene extends Component {
 
     constructor() {
@@ -20,8 +19,6 @@ class ThreeScene extends Component {
     }
 
     componentDidMount() {
-        var ref = this;
-
         this.objects = [];
         this.loader = new GLTFLoader();
         this.scene = new THREE.Scene();
@@ -31,11 +28,10 @@ class ThreeScene extends Component {
         });
         this.renderer.autoClear=false;
         this.renderer.setClearColor(0x000000, 0.0);
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.renderer.setSize(window.innerWidth, window.innerWidth);
         this.mount.appendChild(this.renderer.domElement);
         this.camera = new THREE.PerspectiveCamera(50, window.innerHeight / window.innerWidth, 0.1, 1000);
-        this.camera.position.x = 7.2;
-        //this.camera.position.y = 0.5;
+        this.camera.position.x = 6;
         this.camera.position.y = 10;
         this.camera.rotation.x += 0;
         this.camera.rotation.y -= 0;
@@ -57,6 +53,7 @@ class ThreeScene extends Component {
         this.controls.rotateSpeed = 0.25;
         this.controls.enableDamping = true;
         this.controls.dampingFactor = 0.1;
+
         //this.controls.minPolarAngle = Math.PI / 2 - 0.2;
         //this.controls.maxPolarAngle = Math.PI / 2;
 
@@ -73,7 +70,7 @@ class ThreeScene extends Component {
 
         window.addEventListener("resize", this.handleWindowResize1);
     }
-
+    
     //FINE PREAMBOLO
 
     //mouseListener che si attiva quando premi su una carta per ruotare l'oggetto
@@ -293,8 +290,6 @@ class ThreeScene extends Component {
     render() {
         return (
             <div>
-                <div style={infoStyle}>
-                {/*this.state.infoText*/} </div>
                 <div
                     ref={mount => {
                         this.mount = mount;
