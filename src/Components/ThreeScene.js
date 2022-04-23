@@ -19,6 +19,7 @@ class ThreeScene extends Component {
     }
 
     componentDidMount() {
+        const access = this;
         this.objects = [];
         this.loader = new GLTFLoader();
         this.scene = new THREE.Scene();
@@ -41,7 +42,7 @@ class ThreeScene extends Component {
             this.camera,
             this.renderer.domElement
         );
-
+        
         window.addEventListener("load", this.handleWindowResize1());
         window.addEventListener("keypress", () => this.setState({
             intro:2,
@@ -53,14 +54,14 @@ class ThreeScene extends Component {
         this.controls.rotateSpeed = 0.25;
         this.controls.enableDamping = true;
         this.controls.dampingFactor = 0.1;
-
+        
         //this.controls.minPolarAngle = Math.PI / 2 - 0.2;
         //this.controls.maxPolarAngle = Math.PI / 2;
 
         //this.deprecatedModels();
+
         this.loadCards();
         this.addPlane();
-
         this.envLight()
         this.scene.add(this.camera);
         this.scene.add(this.light);
@@ -199,7 +200,7 @@ class ThreeScene extends Component {
     }
 
     processClosest() {
-        const objects = this.objects
+        const objects = this.objects;
         const camera = this.camera;
         var selected = 0;
         let distance = 100000;

@@ -3,6 +3,7 @@ import React from "react"
 import "./App.css"
 import ThreeScene from "./Components/ThreeScene"
 import Music from "./Components/Music"
+import Ticker from "./Components/Ticker"
 /*
 import { Canvas, useFrame } from '@react-three/fiber'
 import { useSpring, animated } from 'react-spring'
@@ -44,16 +45,28 @@ function App() {
         </div>
       </div>
 
-      <div className="greetings">
-      <div style={{marginTop:"100px"}}></div>
-        You have entered DATA,<br></br>
-        your personal space
-      </div>
-
       <ThreeScene />
       {/*<ThreeScene />*/}
       
-      
+      <div className="greetings">
+        <div style={{marginTop:"100px"}}></div>
+        You have entered DATA,<br></br>
+        your personal space
+
+        {/*<div className="ticker"> NOW PLAYING TRACK #1 
+        NOW PLAYING TRACK #1
+        NOW PLAYING TRACK #1
+        NOW PLAYING TRACK #1
+        NOW PLAYING TRACK #1
+        NOW PLAYING TRACK #1
+        NOW PLAYING TRACK #1
+        NOW PLAYING TRACK #1
+        NOW PLAYING TRACK #1
+
+  </div>*/}
+        <Ticker/>
+      </div>
+    
       {/*<Music />*/}
 
     </div>
