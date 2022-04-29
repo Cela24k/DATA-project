@@ -15,6 +15,7 @@ class ThreeScene extends Component {
             translated:false,
             selected: 0,
             infoText: "ciao",
+            opacity: 100
         };
     }
 
@@ -44,9 +45,17 @@ class ThreeScene extends Component {
         );
         
         window.addEventListener("load", this.handleWindowResize1());
+        window.addEventListener("resize", this.handleWindowResize1);
         window.addEventListener("keypress", () => this.setState({
             intro:2,
         }));
+        window.addEventListener("scroll", function (e){
+            access.setState({
+                opacity: 100 - (window.scrollY/ 600) * 100 + "%"
+            })
+            //console.log((window.scrollY/ 600) * 100);
+            //console.log(this.document.documentElement.scrollHeight);
+        });
 
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
@@ -69,7 +78,6 @@ class ThreeScene extends Component {
 
         this.renderer.render(this.scene, this.camera);
 
-        window.addEventListener("resize", this.handleWindowResize1);
     }
     
     //FINE PREAMBOLO
@@ -287,10 +295,11 @@ class ThreeScene extends Component {
         this.renderer.render(this.scene, this.camera);
     }
 
+    render() {  
+        const s = this.state.opacity;
 
-    render() {
         return (
-            <div>
+            <div id="render" style={{opacity:s} }>
                 <div
                     ref={mount => {
                         this.mount = mount;
@@ -301,29 +310,10 @@ class ThreeScene extends Component {
     }
 }
 
-const material = new THREE.MeshPhysicalMaterial({
-    color: "grey",
-    roughness: 1,
-    transmission: 0.8,
-    thickness: 0.5
-});
-
 const planeMat = new THREE.MeshStandardMaterial({
     side: THREE.DoubleSide,
     color: "black",
     opacity: 0.67,
 })
 
-const infoStyle = {
-    zIndex: 1,
-    position: 'absolute',
-    color: "white",
-    top: "6rem",
-    left:"60%",
-    "userSelect": "none",
-    "MozUserSelect": "none",
-    "KhtmlUserSelect": "none",
-    "WebkitUserSelect": "none",
-    "OuserSelect": "none"
-}
 export default ThreeScene;

@@ -12,7 +12,6 @@ body ,
     font-family: "Futura Lt BT";
     background-color: black;
     max-width: 100%;
-    
 }
 
 .banner{
@@ -55,6 +54,25 @@ body ,
     font-size: medium;
     bottom:0;
     color:black;
+}
+
+.link{
+    color: white;
+    text-decoration: none;
+    margin-right: 0.5rem;
+    margin-left:0.5rem;
+}
+
+.link:hover{
+    color: lightskyblue;
+    text-decoration: none;
+    margin-right: 0.5rem;
+    margin-left:0.5rem;
+}
+
+.lista{
+    display: flex;
+    list-style: none;
 }
 
 canvas { width: 100%; height: 10vh; display: block; box-sizing: inherit; }
