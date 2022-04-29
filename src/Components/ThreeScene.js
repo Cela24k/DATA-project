@@ -53,8 +53,6 @@ class ThreeScene extends Component {
             access.setState({
                 opacity: 100 - (window.scrollY/ 600) * 100 + "%"
             })
-            //console.log((window.scrollY/ 600) * 100);
-            //console.log(this.document.documentElement.scrollHeight);
         });
 
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
@@ -73,7 +71,7 @@ class ThreeScene extends Component {
         this.addPlane();
         this.envLight()
         this.scene.add(this.camera);
-        this.scene.add(this.light);
+        //this.scene.add(this.light);
         this.animation();
 
         this.renderer.render(this.scene, this.camera);
@@ -217,18 +215,27 @@ class ThreeScene extends Component {
             const localdistance = obj.position.distanceTo(camera.position)
             if (localdistance < distance) {
                 distance = localdistance;
-                selected = objects.indexOf(obj)
+                selected = objects.indexOf(obj);
+            }
+            else {
+                //obj.material.transparent = true; 
+                //console.log(obj.opacity)
             }
         })
 
         try {
             if (objects.at(selected)) {
-                objects.at(selected).rotation.z += Math.PI;
-                this.setState({ infoText: objects.at(selected).name })
+                const myobj = objects.at(selected)
+
+                console.log(myobj)
+                //myobj.material.map = new THREE.ImageLoader().load(("nfts/bw.jpg"),() => myobj.update,undefined)
+                myobj.rotation.z += Math.PI;
+                this.setState({ infoText: myobj.name })
                 /*
                 if(this.state.moving === false)
                     objects.at(selected).position.set(1,1,1)
                 */
+
             }
         }
         catch (error) {
