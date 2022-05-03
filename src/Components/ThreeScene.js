@@ -11,16 +11,17 @@ class ThreeScene extends Component {
         super();
         this.state = {
             intro:0,
-            moving: true,
+            moving: false,
             translated:false,
             selected: 0,
             infoText: "ciao",
-            opacity: 100
+            opacity: 100,
         };
     }
 
     componentDidMount() {
         const access = this;
+        this.closest = undefined;
         this.objects = [];
         this.loader = new GLTFLoader();
         this.scene = new THREE.Scene();
@@ -33,8 +34,8 @@ class ThreeScene extends Component {
         this.renderer.setSize(window.innerWidth, window.innerWidth);
         this.mount.appendChild(this.renderer.domElement);
         this.camera = new THREE.PerspectiveCamera(50, window.innerHeight / window.innerWidth, 0.1, 1000);
-        this.camera.position.x = 6;
-        this.camera.position.y = 10;
+        this.camera.position.x = 3;
+        this.camera.position.y = 7;
         this.camera.rotation.x += 0;
         this.camera.rotation.y -= 0;
 
@@ -46,9 +47,15 @@ class ThreeScene extends Component {
         
         window.addEventListener("load", this.handleWindowResize1());
         window.addEventListener("resize", this.handleWindowResize1);
-        window.addEventListener("keypress", () => this.setState({
-            intro:2,
-        }));
+        window.addEventListener("keypress", function (){
+            const factor = access.controls.dampingFactor;
+            access.controls.dampingFactor = 0;
+            access.camera.position.x = access.closest.position.x;
+            access.camera.position.z = access.closest.position.z;
+            access.controls.dampingFactor = factor;
+            access.controls.update();
+            
+        });
         window.addEventListener("scroll", function (e){
             access.setState({
                 opacity: 100 - (window.scrollY/ 600) * 100 + "%"
@@ -62,7 +69,7 @@ class ThreeScene extends Component {
         this.controls.enableDamping = true;
         this.controls.dampingFactor = 0.1;
         
-        //this.controls.minPolarAngle = Math.PI / 2 - 0.2;
+        this.controls.minPolarAngle = Math.PI / 2 //- 0.2;
         //this.controls.maxPolarAngle = Math.PI / 2;
 
         //this.deprecatedModels();
@@ -90,6 +97,11 @@ class ThreeScene extends Component {
     //provare ad aggiungere il fade dello sfondo
     //fare animazione in entrata delle carte
     //Fare in modo che la carta piu vicina si avvicini ulteriormente quando premuta e possa venire ruotata
+
+    approachCamera(){
+        if(this.angle > 0)
+            this.camera.rotateY()
+    }
 
     setStateStopped()
     {
@@ -127,6 +139,7 @@ class ThreeScene extends Component {
     }
 
     loadElement(texture,scene,int,obj,i,count,geometry) {
+        
         const material = new THREE.MeshBasicMaterial({
             color: "white",
             map: texture,
@@ -136,8 +149,8 @@ class ThreeScene extends Component {
         const t = i / count * 2 * Math.PI;
 
         mesh.name="nfts/test_image" + i.toString() + ".png"
-        mesh.position.x = Math.cos(t) * 4;
-        mesh.position.z = Math.sin(t) * 4;
+        mesh.position.x = Math.cos(t) * status.radius;
+        mesh.position.z = Math.sin(t) * status.radius;
         scene.add(mesh);
         int.add(mesh)
         mesh.addEventListener("click", (event) => {
@@ -226,16 +239,16 @@ class ThreeScene extends Component {
         try {
             if (objects.at(selected)) {
                 const myobj = objects.at(selected)
+                let orientation = 0;
+            
+                this.angle = camera.position.angleTo(myobj.position)*180/Math.PI;
+                this.closest = myobj;
 
-                console.log(myobj)
-                //myobj.material.map = new THREE.ImageLoader().load(("nfts/bw.jpg"),() => myobj.update,undefined)
+                orientation = this.closest.position.x * this.camera.position.z - this.closest.position.z * this.camera.position.x;
+                if(orientation > 0) this.angle *= -1;
+                
                 myobj.rotation.z += Math.PI;
                 this.setState({ infoText: myobj.name })
-                /*
-                if(this.state.moving === false)
-                    objects.at(selected).position.set(1,1,1)
-                */
-
             }
         }
         catch (error) {
@@ -285,10 +298,10 @@ class ThreeScene extends Component {
 
         this.lookAtCamera();
         this.processClosest();
+        this.rotateToTarget();
 
         this.interaction.update();
         this.controls.update();
-
     }
 
     animateParticles = () => {
@@ -315,8 +328,32 @@ class ThreeScene extends Component {
 
         )
     }
+
+    rotateToTarget(){
+        if(this.closest){
+            //console.log(Math.floor(this.angle));
+            
+            if(Math.floor(this.angle)!==0){
+                if(Math.floor(this.angle>0)){
+                    this.controls.autoRotateSpeed=2.0;
+                    this.controls.autoRotate = true;
+                }
+                else{
+                    this.controls.autoRotateSpeed=-2.0;
+                    this.controls.autoRotate = true;
+                }
+            }
+            else{
+                this.controls.autoRotate = false;
+            }
+        } 
+    }
 }
 
+const status = {
+    radius: 4,
+    elements:20,
+}
 const planeMat = new THREE.MeshStandardMaterial({
     side: THREE.DoubleSide,
     color: "black",

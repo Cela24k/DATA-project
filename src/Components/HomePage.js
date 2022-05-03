@@ -4,23 +4,27 @@ class HomePage extends Component {
 
     constructor() {
         super();
-
-        this.state = {
-            selected: 0,
-        }
+        this.objects = [];
+        this.closest = undefined;
+        this.closestPoint = undefined;
 
         //mettere lo spawn delle foto qua
         // ********
         
     }
 
+    componentDidMount(){
+        
+    }
+
     render() {
         return (
-            <div>
-                ciao
+            <div id="three">
+                <div
+                    ref={mount => {
+                        this.mount = mount;
+                    }} />
             </div>
         )
     }
-
-
 }
