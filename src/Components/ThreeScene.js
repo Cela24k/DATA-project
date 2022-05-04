@@ -25,6 +25,7 @@ class ThreeScene extends Component {
         this.objects = [];
         this.loader = new GLTFLoader();
         this.scene = new THREE.Scene();
+        this.scene.fog = new THREE.Fog(0x000000,3.5,5);
         this.renderer = new THREE.WebGLRenderer({
             antialias: true,
             alpha:true
@@ -72,7 +73,7 @@ class ThreeScene extends Component {
         this.controls.minPolarAngle = Math.PI / 2 //- 0.2;
         //this.controls.maxPolarAngle = Math.PI / 2;
 
-        //this.deprecatedModels();
+        this.deprecatedModels();
 
         this.loadCards();
         this.addPlane();
