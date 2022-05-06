@@ -4,6 +4,8 @@ import "./App.css"
 import ThreeScene from "./Components/ThreeScene"
 import Music from "./Components/Music"
 import Ticker from "./Components/Ticker"
+import Info from "./Components/Info"
+
 /*
 import { Canvas, useFrame } from '@react-three/fiber'
 import { useSpring, animated } from 'react-spring'
@@ -27,6 +29,7 @@ const width = window.screen.width
 function App() {
   return (
     <div className="App">
+      <Info/>
       <div className="banner">
         <img src='media/data.png' alt="data" width="188" height="80" ></img>
         <div className="section">
@@ -44,7 +47,7 @@ function App() {
           <img src='media/02.png' alt="logo" width="30" height="30" ></img>
         </div>
       </div>
-
+      
       <ThreeScene />
       {/*<ThreeScene />*/}
       

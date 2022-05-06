@@ -5,6 +5,8 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { Reflector } from "three/examples/jsm/objects/Reflector"
 import { Mesh } from "three";
 import { InteractionManager, InteractiveEvent } from "three.interactive";
+import { Line3 } from "three";
+import { Vector3 } from "three";
 class ThreeScene extends Component {
 
     constructor() {
@@ -23,9 +25,13 @@ class ThreeScene extends Component {
         const access = this;
         this.closest = undefined;
         this.objects = [];
+        this.onFront = false;
+        this.previousCoords = undefined;
+
         this.loader = new GLTFLoader();
         this.scene = new THREE.Scene();
-        this.scene.fog = new THREE.Fog(0x000000,3.5,5);
+        //this.scene.fog = new THREE.Fog(0x000000,3.5,10);
+        this.scene.fog = new THREE.FogExp2(0x000000,0.095);
         this.renderer = new THREE.WebGLRenderer({
             antialias: true,
             alpha:true
@@ -73,8 +79,7 @@ class ThreeScene extends Component {
         this.controls.minPolarAngle = Math.PI / 2 //- 0.2;
         //this.controls.maxPolarAngle = Math.PI / 2;
 
-        this.deprecatedModels();
-
+        //this.deprecatedModels();
         this.loadCards();
         this.addPlane();
         this.envLight()
@@ -95,7 +100,6 @@ class ThreeScene extends Component {
     //Sfocatura gaussiana sulle carte dietro
     //logo che cade dall'alto; logo che gira
     //aggiungere logo che gira in mezzo al cerchio di carte
-    //provare ad aggiungere il fade dello sfondo
     //fare animazione in entrata delle carte
     //Fare in modo che la carta piu vicina si avvicini ulteriormente quando premuta e possa venire ruotata
 
@@ -120,7 +124,7 @@ class ThreeScene extends Component {
 
     loadCards() {
         const loader = new THREE.TextureLoader();
-        const geometry = new THREE.PlaneBufferGeometry(1, 1, 1, 1)
+        const geometry = new THREE.PlaneBufferGeometry(1, 1.33333, 1, 1) //default 1,1
         const scene = this.scene
         const obj = this.objects
         const int = this.interaction
@@ -129,7 +133,7 @@ class ThreeScene extends Component {
 
         for (let i = 0; i < count; i++) {
             loader.load(
-                "nfts/" + i.toString() + ".jpg",
+                "pics/" + i.toString() + ".jpg",
                 (texture) => this.loadElement(texture,scene,int,obj,i,count,geometry),
                 undefined,
                 function (err) {
@@ -152,19 +156,24 @@ class ThreeScene extends Component {
         mesh.name="nfts/test_image" + i.toString() + ".png"
         mesh.position.x = Math.cos(t) * status.radius;
         mesh.position.z = Math.sin(t) * status.radius;
+        
+        mesh.addEventListener("click", (event) =>{
+            if(!this.onFront){
+                this.previousCoords = new Vector3(this.closest.position.x,this.closest.position.y,this.closest.position.z) 
+                new Line3(this.closest.position,this.camera.position).getCenter(this.closest.position)
+                this.onFront = true;
+            }
+            else{
+                this.closest.position.x = this.previousCoords.x
+                this.closest.position.y = this.previousCoords.y
+                this.closest.position.z = this.previousCoords.z
+                this.onFront = false;
+            }
+            event.stopPropagation();
+        });
+
         scene.add(mesh);
         int.add(mesh)
-        mesh.addEventListener("click", (event) => {
-            if (event.distance < 3.3)
-            {
-                this.setState({
-                    moving: this.state.moving ? false : true,
-                    translated: this.state.translated ? false : true,
-                })
-            }
-            event.stopPropagation()
-        }
-        );
         obj.push(mesh);
     }
 
@@ -183,10 +192,10 @@ class ThreeScene extends Component {
             antialias: true,
         })
 
-        this.glass.position.y -= 0.499
+        this.glass.position.y -= 0.659 //default 0.499
         this.glass.rotateX(-Math.PI / 2)
         this.plane.rotateX(-Math.PI / 2)
-        this.plane.position.y -= 0.5
+        this.plane.position.y -= 0.66 //default 0.5
         this.scene.add(this.glass)
         this.scene.add(this.plane)
     }
@@ -244,6 +253,30 @@ class ThreeScene extends Component {
             
                 this.angle = camera.position.angleTo(myobj.position)*180/Math.PI;
                 this.closest = myobj;
+
+                //DA VEDERE, CARTA DAVANTI SI MUOVE IN FUORI QUANDO HOVERATA. NOOOOOOOOOOOO
+
+                
+
+                /*
+                this.closest.addEventListener("mouseover", (event) =>{
+                    if(!this.onFront){
+                
+                        this.previousCoords = new Vector3(this.closest.position.x,this.closest.position.y,this.closest.position.z) 
+                        new Line3(this.closest.position,this.camera.position).getCenter(this.closest.position)
+                        this.onFront = true;
+                    }
+                });
+                this.closest.addEventListener("mouseout", (event) =>{
+                    if(this.onFront){
+                
+                        this.closest.position.x = this.previousCoords.x
+                        this.closest.position.y = this.previousCoords.y
+                        this.closest.position.z = this.previousCoords.z
+                        this.onFront = false;
+                    }
+                });
+                */
 
                 orientation = this.closest.position.x * this.camera.position.z - this.closest.position.z * this.camera.position.x;
                 if(orientation > 0) this.angle *= -1;
