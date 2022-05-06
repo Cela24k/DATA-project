@@ -27,6 +27,7 @@ class ThreeScene extends Component {
         this.objects = [];
         this.onFront = false;
         this.previousCoords = undefined;
+        this.lockedControls = false;
 
         this.loader = new GLTFLoader();
         this.scene = new THREE.Scene();
@@ -157,18 +158,31 @@ class ThreeScene extends Component {
         mesh.position.x = Math.cos(t) * status.radius;
         mesh.position.z = Math.sin(t) * status.radius;
         
+        mesh.addEventListener("mousedown", (event)=>{
+            this.lockedControls = true;
+            event.stopPropagation();
+        })
+        mesh.addEventListener("mouseup", (event)=>{
+            this.lockedControls = false;
+            event.stopPropagation();
+        })
         mesh.addEventListener("click", (event) =>{
-            if(!this.onFront){
-                this.previousCoords = new Vector3(this.closest.position.x,this.closest.position.y,this.closest.position.z) 
-                new Line3(this.closest.position,this.camera.position).getCenter(this.closest.position)
-                this.onFront = true;
-            }
-            else{
-                this.closest.position.x = this.previousCoords.x
-                this.closest.position.y = this.previousCoords.y
-                this.closest.position.z = this.previousCoords.z
-                this.onFront = false;
-            }
+            if(Math.floor(this.angle) === 0 && this.lockedControls === false )
+            {
+                if(!this.onFront){
+                    this.previousCoords = new Vector3(this.closest.position.x,this.closest.position.y,this.closest.position.z) 
+                    new Line3(this.closest.position,this.camera.position).getCenter(this.closest.position)
+                    this.controls.enableRotate = false;
+                    this.onFront = true;
+                }
+                else{
+                    this.closest.position.x = this.previousCoords.x
+                    this.closest.position.y = this.previousCoords.y
+                    this.closest.position.z = this.previousCoords.z
+                    this.controls.enableRotate = true;
+                    this.onFront = false;
+                }  
+            } 
             event.stopPropagation();
         });
 
@@ -365,7 +379,6 @@ class ThreeScene extends Component {
 
     rotateToTarget(){
         if(this.closest){
-            //console.log(Math.floor(this.angle));
             
             if(Math.floor(this.angle)!==0){
                 if(Math.floor(this.angle>0)){
