@@ -2,16 +2,16 @@ import { Component } from "react/cjs/react.production.min";
 
 class Info extends Component{
     
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state = {
-            opened:false
+            opened: this.props.open,
         }
     }
 
     render(){
+        console.log(this.state.opened)
         if(this.state.opened) {
-            console.log("ciao");
             return InfoHTML();
         }
         else return null;

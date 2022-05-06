@@ -167,7 +167,9 @@ class ThreeScene extends Component {
             event.stopPropagation();
         })
         mesh.addEventListener("click", (event) =>{
-            if(Math.floor(this.angle) === 0 && this.lockedControls === false )
+            //Math.floor(this.angle) === 0 && this.lockedControls === false
+
+            if(this.lockedControls === false && this.controls.autoRotate === false && event.distance <= 3.65)
             {
                 if(!this.onFront){
                     this.previousCoords = new Vector3(this.closest.position.x,this.closest.position.y,this.closest.position.z) 

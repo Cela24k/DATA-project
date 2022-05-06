@@ -29,7 +29,7 @@ const width = window.screen.width
 function App() {
   return (
     <div className="App">
-      <Info/>
+      <Info open={state.infoOpened}/>
       <div className="banner">
         <img src='media/data.png' alt="data" width="188" height="80" ></img>
         <div className="section">
@@ -49,7 +49,6 @@ function App() {
       </div>
       
       <ThreeScene />
-      {/*<ThreeScene />*/}
       
       <div className="greetings">
         <div style={{marginTop:"100px"}}></div>
@@ -63,6 +62,10 @@ function App() {
     </div>
 
   );
+}
+
+let state = {
+  infoOpened: false,
 }
 
 const logo = {
