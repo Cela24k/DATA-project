@@ -7,6 +7,8 @@ import { Mesh } from "three";
 import { InteractionManager, InteractiveEvent } from "three.interactive";
 import { Line3 } from "three";
 import { Vector3 } from "three";
+import Helper  from "./Helper";
+
 class ThreeScene extends Component {
 
     constructor() {
@@ -18,6 +20,7 @@ class ThreeScene extends Component {
             selected: 0,
             infoText: "ciao",
             opacity: 100,
+            showHelper:true,
         };
     }
 
@@ -31,8 +34,8 @@ class ThreeScene extends Component {
 
         this.loader = new GLTFLoader();
         this.scene = new THREE.Scene();
-        //this.scene.fog = new THREE.Fog(0x000000,3.5,10);
-        this.scene.fog = new THREE.FogExp2(0x000000,0.095);
+        this.scene.fog = new THREE.Fog(0x000000,3.5,15);
+        //this.scene.fog = new THREE.FogExp2(0x000000,0.095);
         this.renderer = new THREE.WebGLRenderer({
             antialias: true,
             alpha:true
@@ -55,14 +58,28 @@ class ThreeScene extends Component {
         
         window.addEventListener("load", this.handleWindowResize1());
         window.addEventListener("resize", this.handleWindowResize1);
+
+        window.addEventListener("mousedown", ()=>{
+            //access.setState({showHelper:false});
+            this.controls.autoRotate = false;
+            this.lockedControls = true;
+            //console.log(this.lockedControls)
+        })
+        window.addEventListener("mouseup", ()=>{
+            this.lockedControls = false;
+            //console.log(this.lockedControls)
+        })
         window.addEventListener("keypress", function (){
+            access.setState({showHelper:false});
+            
+            /*
             const factor = access.controls.dampingFactor;
             access.controls.dampingFactor = 0;
             access.camera.position.x = access.closest.position.x;
             access.camera.position.z = access.closest.position.z;
             access.controls.dampingFactor = factor;
             access.controls.update();
-            
+            */
         });
         window.addEventListener("scroll", function (e){
             access.setState({
@@ -103,12 +120,7 @@ class ThreeScene extends Component {
     //aggiungere logo che gira in mezzo al cerchio di carte
     //fare animazione in entrata delle carte
     //Fare in modo che la carta piu vicina si avvicini ulteriormente quando premuta e possa venire ruotata
-
-    approachCamera(){
-        if(this.angle > 0)
-            this.camera.rotateY()
-    }
-
+    
     setStateStopped()
     {
         this.setState({
@@ -121,7 +133,7 @@ class ThreeScene extends Component {
         this.setState({
             intro:2,
         })
-    }
+    }  
 
     loadCards() {
         const loader = new THREE.TextureLoader();
@@ -158,30 +170,24 @@ class ThreeScene extends Component {
         mesh.position.x = Math.cos(t) * status.radius;
         mesh.position.z = Math.sin(t) * status.radius;
         
-        mesh.addEventListener("mousedown", (event)=>{
-            this.lockedControls = true;
-            event.stopPropagation();
-        })
-        mesh.addEventListener("mouseup", (event)=>{
-            this.lockedControls = false;
-            event.stopPropagation();
-        })
+        
         mesh.addEventListener("click", (event) =>{
-            //Math.floor(this.angle) === 0 && this.lockedControls === false
-
             if(this.lockedControls === false && this.controls.autoRotate === false && event.distance <= 3.65)
             {
+                this.setState({showHelper:false})
                 if(!this.onFront){
                     this.previousCoords = new Vector3(this.closest.position.x,this.closest.position.y,this.closest.position.z) 
                     new Line3(this.closest.position,this.camera.position).getCenter(this.closest.position)
                     this.controls.enableRotate = false;
                     this.onFront = true;
+                    this.scene.fog = new THREE.FogExp2(0x000000,0.2);
                 }
                 else{
                     this.closest.position.x = this.previousCoords.x
                     this.closest.position.y = this.previousCoords.y
                     this.closest.position.z = this.previousCoords.z
                     this.controls.enableRotate = true;
+                    this.scene.fog = new THREE.Fog(0x000000,3.5,15);
                     this.onFront = false;
                 }  
             } 
@@ -365,25 +371,11 @@ class ThreeScene extends Component {
         this.renderer.render(this.scene, this.camera);
     }
 
-    render() {  
-        const s = this.state.opacity;
-
-        return (
-            <div id="render" style={{opacity:s} }>
-                <div
-                    ref={mount => {
-                        this.mount = mount;
-                    }} />
-            </div>
-
-        )
-    }
-
     rotateToTarget(){
-        if(this.closest){
-            
+        if(this.closest){   
             if(Math.floor(this.angle)!==0){
                 if(Math.floor(this.angle>0)){
+                    this.setState({showHelper:false})
                     this.controls.autoRotateSpeed=2.0;
                     this.controls.autoRotate = true;
                 }
@@ -396,6 +388,26 @@ class ThreeScene extends Component {
                 this.controls.autoRotate = false;
             }
         } 
+    }
+
+    render() {  
+        const access = this;
+        const s = this.state.opacity;
+        const helper = this.state.showHelper;
+        let helperPanel;
+
+        if(helper) helperPanel = (<Helper/>)
+        else helperPanel = null;
+
+        return (
+            <div id="render" style={{opacity:s}}>
+                <div
+                    ref={mount => {
+                        this.mount = mount;
+                    }} />
+                {helperPanel}
+            </div>
+        )
     }
 }
 

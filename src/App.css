@@ -20,7 +20,7 @@ body ,
     height: auto;
     position: fixed;
     z-index: 1;
-    align-items: flex-end;
+    align-items: center;
     display: flex;
     padding: 3rem;
     justify-content: space-evenly;
@@ -29,10 +29,11 @@ body ,
 
 .section{
     color: "white";
-    width: "fit-content";
+    width: "inherit";
     font-weight: "lighter";
     display: "flex";
 }
+
 .greetings {
     width: inherit;
     height: 600px;
@@ -81,6 +82,37 @@ body ,
     background-color:white;
     color: green;
 }
+
+.logo{
+    height: 10rem;
+    width: 10rem;
+    /*top:0rem;
+    width: 20rem;
+    height: 20rem;
+    position: fixed;*/
+    background-color: white;
+    -webkit-mask: url(DATA1.svg) no-repeat center;
+    mask: url(DATA1.svg) no-repeat center;
+}
+.helper_row{
+    position:absolute;
+    top:20%;
+    height: 5%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    z-index: 1;
+    color:white;
+}
+.helper{
+    /*left:50%;*/
+    display: block;
+}
+img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
 canvas { width: 100%; height: 10vh; display: block; box-sizing: inherit; }
 
 

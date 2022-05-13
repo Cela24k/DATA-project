@@ -29,39 +29,54 @@ const width = window.screen.width
 function App() {
   return (
     <div className="App">
-      <Info open={state.infoOpened}/>
-      <div className="banner">
-        <img src='media/data.png' alt="data" width="188" height="80" ></img>
-        <div className="section">
-          <nav>
-            <ul className="lista">
-              <li><a className="link" href="soundtrack">DT soundtrack</a></li>
-              <li> <a className="link" href="nfts">NFTs</a></li>
-              <li> <a className="link" href="clothing">Clothing</a></li>
-              <li> <a className="link" href="work">Work</a></li>
-              <li> <a className="link" href="info">Info</a></li>
-            </ul>
-          </nav>
-        </div>
-        <div style={logo}>  
-          <img src='media/02.png' alt="logo" width="30" height="30" ></img>
-        </div>
-      </div>
-      
+      <Info open={state.infoOpened} />
+      <Banner />
       <ThreeScene />
-      
+
       <div className="greetings">
-        <div style={{marginTop:"100px"}}></div>
+        <div style={{ marginTop: "100px" }}></div>
         You have entered DATA,<br></br>
         your personal space
-        <Ticker/>
+        <Ticker />
       </div>
-    
+
       {/*<Music />*/}
 
     </div>
 
   );
+}
+
+function Banner() {
+  return (  
+    <div className="banner">
+    <div className="logo"></div>
+    <div className="section">
+        <nav>
+          <ul className="lista" style={{padding:"inherit"}}>
+            <li><a className="link" href="soundtrack">DT soundtrack</a></li>
+            <li> <a className="link" href="nfts">NFTs</a></li>
+            <li> <a className="link" href="clothing">Clothing</a></li>
+            <li> <a className="link" href="work">Work</a></li>
+            <li> <a className="link" href="info">Info</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div style={logo}>
+        <img src='media/02.png' alt="logo" width="40" height="40" ></img>
+      </div>
+    </div>)
+}
+
+function Banner1() {
+  return (
+    <div>
+      <div className="logo"></div>
+      <div style={logo}>
+        <img src='media/02.png' alt="logo" width="30" height="30" ></img>
+      </div>
+    </div>
+  )
 }
 
 let state = {
@@ -72,7 +87,8 @@ const logo = {
   display: "flex",
   listStyle: "none",
   width: "188px",
-  padding: "0rem"
+  padding: "0rem",
+  justifyContent: "center",
 }
 
 export default App;
