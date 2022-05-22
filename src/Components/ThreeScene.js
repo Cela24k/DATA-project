@@ -15,7 +15,7 @@ class ThreeScene extends Component {
         super();
         this.state = {
             intro:0,
-            moving: false,
+            autoMoving: true,
             translated:false,
             selected: 0,
             infoText: "ciao",
@@ -42,7 +42,7 @@ class ThreeScene extends Component {
         });
         this.renderer.autoClear=false;
         this.renderer.setClearColor(0x000000, 0.0);
-        this.renderer.setSize(window.innerWidth, window.innerWidth);
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.mount.appendChild(this.renderer.domElement);
         this.camera = new THREE.PerspectiveCamera(50, window.innerHeight / window.innerWidth, 0.1, 1000);
         this.camera.position.x = 3;
@@ -60,14 +60,12 @@ class ThreeScene extends Component {
         window.addEventListener("resize", this.handleWindowResize1);
 
         window.addEventListener("mousedown", ()=>{
-            //access.setState({showHelper:false});
+            this.setState({autoMoving:false})
             this.controls.autoRotate = false;
             this.lockedControls = true;
-            //console.log(this.lockedControls)
         })
         window.addEventListener("mouseup", ()=>{
             this.lockedControls = false;
-            //console.log(this.lockedControls)
         })
         window.addEventListener("keypress", function (){
             access.setState({showHelper:false});
@@ -93,8 +91,9 @@ class ThreeScene extends Component {
         this.controls.rotateSpeed = 0.25;
         this.controls.enableDamping = true;
         this.controls.dampingFactor = 0.1;
-        
-        this.controls.minPolarAngle = Math.PI / 2 //- 0.2;
+        this.controls.minPolarAngle = Math.PI / 2 
+        this.controls.enablePan = false;
+        this.controls.autoRotate = true;
         //this.controls.maxPolarAngle = Math.PI / 2;
 
         //this.deprecatedModels();
@@ -104,7 +103,6 @@ class ThreeScene extends Component {
         this.scene.add(this.camera);
         //this.scene.add(this.light);
         this.animation();
-
         this.renderer.render(this.scene, this.camera);
 
     }
@@ -124,7 +122,7 @@ class ThreeScene extends Component {
     setStateStopped()
     {
         this.setState({
-            moving: this.state.moving ? false : true,
+            autoMoving: this.state.autpMoving ? false : true,
         })
     }
 
@@ -337,7 +335,7 @@ class ThreeScene extends Component {
     }
 
     menu(){
-        this.controls.autoRotate = this.state.moving;
+        this.controls.autoRotate = this.state.autoMoving;
         this.controls.autoRotateSpeed = -0.4
     }
 
@@ -372,7 +370,7 @@ class ThreeScene extends Component {
     }
 
     rotateToTarget(){
-        if(this.closest){   
+        if(this.closest && !this.state.autoMoving){   
             if(Math.floor(this.angle)!==0){
                 if(Math.floor(this.angle>0)){
                     this.setState({showHelper:false})
@@ -400,7 +398,7 @@ class ThreeScene extends Component {
         else helperPanel = null;
 
         return (
-            <div id="render" style={{opacity:s}}>
+            <div id="render" style={{opacity:s, top:"100px"}}>
                 <div
                     ref={mount => {
                         this.mount = mount;

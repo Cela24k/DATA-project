@@ -1,1 +1,1 @@
-npm start
+call npm start

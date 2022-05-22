@@ -6,13 +6,6 @@ import Music from "./Components/Music"
 import Ticker from "./Components/Ticker"
 import Info from "./Components/Info"
 
-/*
-import { Canvas, useFrame } from '@react-three/fiber'
-import { useSpring, animated } from 'react-spring'
-import Main from "./Components/Main"
-
-*/
-
 const firebaseConfig = {
   apiKey: "AIzaSyA3a1LIWTdxdfPwioq0tbsHlQxc2DIx23E",
   authDomain: "mysite-5b666.firebaseapp.com",
@@ -32,38 +25,34 @@ function App() {
       <Info open={state.infoOpened} />
       <Banner />
       <ThreeScene />
-
-      <div className="greetings">
-        <div style={{ marginTop: "100px" }}></div>
-        You have entered DATA,<br></br>
-        your personal space
-        <Ticker />
-      </div>
-
-      {/*<Music />*/}
-
     </div>
-
   );
 }
+
+ //riformattare in css 
 
 function Banner() {
   return (  
     <div className="banner">
-    <div className="logo"></div>
+    <div style={{display: "flex"}}>
+      <div className="logo"></div>
+      <div style={{color:"Grey", alignSelf:"center"}}> 
+        <p style={{marginBottom:'2px'}}>Welcome to Data, our digital archive</p>
+        <p style={{marginTop:'0', marginBottom:'0'}}>and personal space</p>
+      </div>
+    </div>
+    <div style={{width:"150px"}}>
+
+    </div>
     <div className="section">
         <nav>
           <ul className="lista" style={{padding:"inherit"}}>
-            <li><a className="link" href="soundtrack">DT soundtrack</a></li>
-            <li> <a className="link" href="nfts">NFTs</a></li>
-            <li> <a className="link" href="clothing">Clothing</a></li>
-            <li> <a className="link" href="work">Work</a></li>
-            <li> <a className="link" href="info">Info</a></li>
+            <li><a className="link" href="soundtrack">Photo </a></li>
+            <li> <a className="link" href="nfts">Info</a></li>
+            <li> <a style={{border: "ridge", borderRadius: "20px", paddingLeft:"10px", paddingRight:"10px" }} className="link" href="clothing">Contact</a></li>
+            <li> <div style={{width:"100px", color:"grey" , textAlign: "end"}}> EN </div> </li>
           </ul>
         </nav>
-      </div>
-      <div style={logo}>
-        <img src='media/02.png' alt="logo" width="40" height="40" ></img>
       </div>
     </div>)
 }

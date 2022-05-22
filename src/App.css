@@ -1,4 +1,11 @@
-@import url(https://db.onlinewebfonts.com/c/19580604133dfd68ae370ddc889aedab?family=Futura+Lt+BT);
+@font-face {
+    font-family: "Uncut Sans";
+    src: url(./Webfonts/Uncut-Sans-Regular.woff2);
+}
+@font-face {
+    font-family: "Uncut Sans Bold";
+    src: url(./Webfonts/Uncut-Sans-Bold.woff2);
+}
 
 html,
 body ,
@@ -9,7 +16,7 @@ body ,
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "Futura Lt BT";
+    font-family: "Uncut Sans";
     background-color: black;
     max-width: 100%;
 }
@@ -20,7 +27,7 @@ body ,
     height: auto;
     position: fixed;
     z-index: 1;
-    align-items: center;
+    align-items: flex-end;
     display: flex;
     padding: 3rem;
     justify-content: space-evenly;
@@ -84,15 +91,12 @@ body ,
 }
 
 .logo{
-    height: 10rem;
-    width: 10rem;
-    /*top:0rem;
-    width: 20rem;
-    height: 20rem;
-    position: fixed;*/
+    height: 5rem;
+    width: 13rem;
     background-color: white;
     -webkit-mask: url(DATA1.svg) no-repeat center;
     mask: url(DATA1.svg) no-repeat center;
+    background-position: center;
 }
 .helper_row{
     position:absolute;

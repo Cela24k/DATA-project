@@ -5,7 +5,7 @@ class Helper extends Component{
     constructor(){
         super();
         this.state = {
-            opacity:0.25
+            opacity:0.8
         }
         this.frame = 0;
     }
@@ -16,10 +16,10 @@ class Helper extends Component{
         this.frame+=1;*/
         return(
             <div className="helper_row" style={{opacity:this.state.opacity}}>
-                <div className="helper">
-                    <img src="media/drag1.gif" alt="drag to move"></img>
+                <div className="helper" style={{width: "4rem"}}>
+                    <img src="media/Icone DRAG N SCROLL.svg" alt="drag to move"></img>
                 </div>
-                <p color="white">Drag to discover.</p>
+                <p style={{fontFamily: "Uncut Sans Bold", fontStyle:"italic"}} color="white">SCROLL OR DRAG TO DISCOVER</p>
             </div>
             
         )
