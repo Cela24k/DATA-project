@@ -58,35 +58,26 @@ class ThreeScene extends Component {
         
         window.addEventListener("load", this.handleWindowResize1());
         window.addEventListener("resize", this.handleWindowResize1);
-
+        
+        window.addEventListener('touchstart', ()=>{
+            this.setState({autoMoving:false});
+        })
         window.addEventListener("mousedown", ()=>{
-            this.setState({autoMoving:false})
+            this.setState({autoMoving:false});
             this.controls.autoRotate = false;
             this.lockedControls = true;
         })
         window.addEventListener("mouseup", ()=>{
             this.lockedControls = false;
         })
-        window.addEventListener("keypress", function (){
-            access.setState({showHelper:false});
-            
-            /*
-            const factor = access.controls.dampingFactor;
-            access.controls.dampingFactor = 0;
-            access.camera.position.x = access.closest.position.x;
-            access.camera.position.z = access.closest.position.z;
-            access.controls.dampingFactor = factor;
-            access.controls.update();
-            */
-        });
-        window.addEventListener("scroll", function (e){
+        window.addEventListener('scroll', function (e){
             access.setState({
                 opacity: 100 - (window.scrollY/ 600) * 100 + "%"
             })
+
         });
 
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-
         this.controls.enableZoom = false;
         this.controls.rotateSpeed = 0.25;
         this.controls.enableDamping = true;
@@ -94,17 +85,14 @@ class ThreeScene extends Component {
         this.controls.minPolarAngle = Math.PI / 2 
         this.controls.enablePan = false;
         this.controls.autoRotate = true;
-        //this.controls.maxPolarAngle = Math.PI / 2;
+        this.controls.autoRotateSpeed = -0.4;
 
-        //this.deprecatedModels();
         this.loadCards();
         this.addPlane();
         this.envLight()
         this.scene.add(this.camera);
-        //this.scene.add(this.light);
         this.animation();
         this.renderer.render(this.scene, this.camera);
-
     }
     
     //FINE PREAMBOLO
@@ -220,17 +208,6 @@ class ThreeScene extends Component {
         this.scene.add(this.plane)
     }
 
-    deprecatedModels() {
-        this.loader.load('SuperG2.glb', (gltf) => {
-            gltf.scene.scale.set(1, 1, 1)
-            this.scene.add(gltf.scene)
-        }, undefined, function (error) {
-
-            console.error(error);
-
-        });
-    }
-
     envLight() {
         this.dlight = new THREE.DirectionalLight(0x95a4b3, 15);
         //this.dlight = new THREE.AmbientLight("white", 1);
@@ -265,7 +242,6 @@ class ThreeScene extends Component {
                 //console.log(obj.opacity)
             }
         })
-
         try {
             if (objects.at(selected)) {
                 const myobj = objects.at(selected)
@@ -274,35 +250,12 @@ class ThreeScene extends Component {
                 this.angle = camera.position.angleTo(myobj.position)*180/Math.PI;
                 this.closest = myobj;
 
-                //DA VEDERE, CARTA DAVANTI SI MUOVE IN FUORI QUANDO HOVERATA. NOOOOOOOOOOOO
-
-                
-
-                /*
-                this.closest.addEventListener("mouseover", (event) =>{
-                    if(!this.onFront){
-                
-                        this.previousCoords = new Vector3(this.closest.position.x,this.closest.position.y,this.closest.position.z) 
-                        new Line3(this.closest.position,this.camera.position).getCenter(this.closest.position)
-                        this.onFront = true;
-                    }
-                });
-                this.closest.addEventListener("mouseout", (event) =>{
-                    if(this.onFront){
-                
-                        this.closest.position.x = this.previousCoords.x
-                        this.closest.position.y = this.previousCoords.y
-                        this.closest.position.z = this.previousCoords.z
-                        this.onFront = false;
-                    }
-                });
-                */
-
                 orientation = this.closest.position.x * this.camera.position.z - this.closest.position.z * this.camera.position.x;
                 if(orientation > 0) this.angle *= -1;
                 
                 myobj.rotation.z += Math.PI;
                 this.setState({ infoText: myobj.name })
+                sceneText.text = this.state.infoText;
             }
         }
         catch (error) {
@@ -310,56 +263,15 @@ class ThreeScene extends Component {
         }
     }
 
-    schermata(){
-        this.controls.autoRotate = false;
-
-        if(this.camera.position.y > -5)
-        {
-            this.controls.target.y -=0.03;
-            this.camera.position.y -= 0.03;
-            this.camera.position.x -= 0.06;  
-        }
-    }
-
-    splash(){
-        if(this.camera.position.y > 0.5)
-        {
-            this.camera.position.y -= 0.04;
-            this.camera.position.x -= 0.06;
-        }
-        else
-        {
-            this.controls.maxPolarAngle = Math.PI / 2;
-            this.setState({intro:1});
-        }
-    }
-
-    menu(){
-        this.controls.autoRotate = this.state.autoMoving;
-        this.controls.autoRotateSpeed = -0.4
-    }
-
     animation = () => {
         requestAnimationFrame(this.animation);
         this.renderer.render(this.scene, this.camera);
-
-        if(this.state.intro === 0)
-            this.splash();
-        else if(this.state.intro === 1)
-            this.menu();
-        else if(this.state.intro === 2)
-            this.schermata();
-
         this.lookAtCamera();
         this.processClosest();
         this.rotateToTarget();
 
         this.interaction.update();
         this.controls.update();
-    }
-
-    animateParticles = () => {
-        requestAnimationFrame(this.animateParticles);
     }
 
     handleWindowResize1 = () => {
@@ -408,6 +320,13 @@ class ThreeScene extends Component {
         )
     }
 }
+
+export var sceneText = {
+    text : 'ciao',
+    getText: function(){
+        return this.text;
+    }
+} 
 
 const status = {
     radius: 4,

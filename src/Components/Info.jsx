@@ -10,7 +10,6 @@ class Info extends Component{
     }
 
     render(){
-        console.log(this.state.opened)
         if(this.state.opened) {
             return InfoHTML();
         }

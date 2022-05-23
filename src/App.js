@@ -1,10 +1,9 @@
 import { initializeApp } from "firebase/app"
-import React from "react"
+import React, {useState, useEffect} from "react"
 import "./App.css"
 import ThreeScene from "./Components/ThreeScene"
-import Music from "./Components/Music"
-import Ticker from "./Components/Ticker"
 import Info from "./Components/Info"
+import { sceneText } from "./Components/ThreeScene"
 
 const firebaseConfig = {
   apiKey: "AIzaSyA3a1LIWTdxdfPwioq0tbsHlQxc2DIx23E",
@@ -20,6 +19,7 @@ const app = initializeApp(firebaseConfig);
 const width = window.screen.width
 
 function App() {
+
   return (
     <div className="App">
       <Info open={state.infoOpened} />
@@ -29,9 +29,16 @@ function App() {
   );
 }
 
- //riformattare in css 
+//riformattare in css 
 
-function Banner() {
+function Banner( ) {
+  const [text, setText] = useState('ok');
+
+  useEffect(() => {
+    console.log(text);
+    setText(sceneText.getText());
+  });
+  
   return (  
     <div className="banner">
     <div style={{display: "flex"}}>
@@ -47,7 +54,7 @@ function Banner() {
     <div className="section">
         <nav>
           <ul className="lista" style={{padding:"inherit"}}>
-            <li><a className="link" href="soundtrack">Photo </a></li>
+            <li><a className="link" href="soundtrack">{text} </a></li>
             <li> <a className="link" href="nfts">Info</a></li>
             <li> <a style={{border: "ridge", borderRadius: "20px", paddingLeft:"10px", paddingRight:"10px" }} className="link" href="clothing">Contact</a></li>
             <li> <div style={{width:"100px", color:"grey" , textAlign: "end"}}> EN </div> </li>
@@ -57,27 +64,8 @@ function Banner() {
     </div>)
 }
 
-function Banner1() {
-  return (
-    <div>
-      <div className="logo"></div>
-      <div style={logo}>
-        <img src='media/02.png' alt="logo" width="30" height="30" ></img>
-      </div>
-    </div>
-  )
-}
-
 let state = {
   infoOpened: false,
-}
-
-const logo = {
-  display: "flex",
-  listStyle: "none",
-  width: "188px",
-  padding: "0rem",
-  justifyContent: "center",
 }
 
 export default App;
