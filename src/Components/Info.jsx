@@ -1,27 +1,20 @@
 import { Component } from "react/cjs/react.production.min";
+import Banner from "./Banner";
 
-class Info extends Component{
-    
-    constructor(props){
+class Info extends Component {
+
+    constructor(props) {
         super(props);
         this.state = {
-            opened: this.props.open,
         }
     }
 
-    render(){
-        if(this.state.opened) {
-            return InfoHTML();
-        }
-        else return null;
+    render() {
+        return (
+            <div className="info">
+                <Banner type="info"/>
+            </div>
+        )
     }
 }
 export default Info;
-
-function InfoHTML(){
-    return (
-        <div className="info">
-            Ciaos
-        </div>
-    )
-} 

@@ -35,13 +35,13 @@ class ThreeScene extends Component {
         this.loader = new GLTFLoader();
         this.scene = new THREE.Scene();
         this.scene.fog = new THREE.Fog(0x000000,3.5,15);
-        //this.scene.fog = new THREE.FogExp2(0x000000,0.095);
         this.renderer = new THREE.WebGLRenderer({
             antialias: true,
             alpha:true
         });
         this.renderer.autoClear=false;
         this.renderer.setClearColor(0x000000, 0.0);
+        console.log(window.innerHeight, window.innerWidth);
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.mount.appendChild(this.renderer.domElement);
         this.camera = new THREE.PerspectiveCamera(50, window.innerHeight / window.innerWidth, 0.1, 1000);
@@ -82,11 +82,17 @@ class ThreeScene extends Component {
         this.controls.rotateSpeed = 0.25;
         this.controls.enableDamping = true;
         this.controls.dampingFactor = 0.1;
-        this.controls.minPolarAngle = Math.PI / 2 
+        this.controls.minPolarAngle = Math.PI / 2;
+        this.controls.maxPolarAngle = Math.PI / 2;
         this.controls.enablePan = false;
         this.controls.autoRotate = true;
         this.controls.autoRotateSpeed = -0.4;
 
+        /*
+        const axesHelper = new THREE.AxesHelper( 5 );
+        this.scene.add( axesHelper );
+        */
+       
         this.loadCards();
         this.addPlane();
         this.envLight()
@@ -106,20 +112,6 @@ class ThreeScene extends Component {
     //aggiungere logo che gira in mezzo al cerchio di carte
     //fare animazione in entrata delle carte
     //Fare in modo che la carta piu vicina si avvicini ulteriormente quando premuta e possa venire ruotata
-    
-    setStateStopped()
-    {
-        this.setState({
-            autoMoving: this.state.autpMoving ? false : true,
-        })
-    }
-
-    setThird()
-    {
-        this.setState({
-            intro:2,
-        })
-    }  
 
     loadCards() {
         const loader = new THREE.TextureLoader();
@@ -136,7 +128,7 @@ class ThreeScene extends Component {
                 (texture) => this.loadElement(texture,scene,int,obj,i,count,geometry),
                 undefined,
                 function (err) {
-                    console.error('An error happened.');
+                    console.error('An error happened loading a picture.');
                 }
             )
         }
@@ -275,7 +267,7 @@ class ThreeScene extends Component {
     }
 
     handleWindowResize1 = () => {
-        this.camera.aspect = window.innerWidth / window.innerHeight;
+        this.camera.aspect = window.innerWidth / window.innerHeight ;
         this.camera.updateProjectionMatrix();
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.render(this.scene, this.camera);
@@ -310,7 +302,7 @@ class ThreeScene extends Component {
         else helperPanel = null;
 
         return (
-            <div id="render" style={{opacity:s, top:"100px"}}>
+            <div id="render" style={{opacity:s, position:"absolute", top:"40px"}}>
                 <div
                     ref={mount => {
                         this.mount = mount;
