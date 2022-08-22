@@ -63,13 +63,13 @@ body,
     visibility: hidden;
 }
 
-.banner {
+.banner_{
     max-width: 100%;
     width: 100%;
     height: auto;
     top: 30px;
     position: fixed;
-    z-index: 1;
+    z-index: 99;
     align-items: baseline;
     display: flex;
     padding: 3rem;
@@ -79,19 +79,28 @@ body,
 }
 
 .banner_info {
-    background-color: white;
     max-width: 100%;
     width: 100%;
-    height: 100vh;
+    height: auto;
     top:30px;
     position: fixed;
-    z-index: 1;
+    z-index: 99;
     align-items: baseline;
     display: flex;
     padding: 3rem;
     justify-content: space-evenly;
     box-sizing: inherit;
     font-size: 18px;
+}
+
+.label{
+    color: grey;
+    align-self: end;
+    padding-bottom: 4px
+}
+
+.divider{
+    width: 150px;
 }
 
 .section {
@@ -126,8 +135,15 @@ body,
     color: black;
 }
 
-.link {
+.link_ {
     color: white;
+    text-decoration: none;
+    margin-right: 0.5rem;
+    margin-left: 0.5rem;
+}
+
+.link_info {
+    color: black;
     text-decoration: none;
     margin-right: 0.5rem;
     margin-left: 0.5rem;
@@ -146,18 +162,28 @@ body,
 }
 
 .info {
-    width: 100%;
-    height: auto;
+    width: 100vw;
+    height: 100vh;
+    z-index: 2;
     position: absolute;
-    z-index: 3;
+    top: 0;
     background-color: white;
-    color: green;
 }
 
-.logo {
+.logo_{
     height: 4.5rem;
     width: 13rem;
     background-color: white;
+    -webkit-mask: url(DATA1.svg) no-repeat center;
+    mask: url(DATA1.svg) no-repeat center;
+    background-position: center;
+    /*filter:invert();*/
+}
+
+.logo_info {
+    height: 4.5rem;
+    width: 13rem;
+    background-color: black;
     -webkit-mask: url(DATA1.svg) no-repeat center;
     mask: url(DATA1.svg) no-repeat center;
     background-position: center;

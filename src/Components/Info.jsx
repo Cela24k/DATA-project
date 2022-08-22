@@ -12,7 +12,6 @@ class Info extends Component {
     render() {
         return (
             <div className="info">
-                <Banner type="info"/>
             </div>
         )
     }

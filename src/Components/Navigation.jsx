@@ -1,6 +1,4 @@
 import { Component } from "react/cjs/react.production.min";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronDown, faArrowRightLong, faArrowLeftLong } from "@fortawesome/free-solid-svg-icons";
 
 class Navigation extends Component{
 
@@ -22,7 +20,6 @@ render(){
                      position:"fixed", 
                      bottom:"100px"}}>
             <div style={{width:"10rem"}}>
-                {/*<FontAwesomeIcon icon={faArrowLeftLong}></FontAwesomeIcon>*/}
                 <span className="material-icons">arrow_back</span>
             </div>
             <div style={{width:"5rem",height:"1.5rem", border:"2px solid", borderRadius:"16px", display:"flex",alignItems:"center",justifyContent:"center"}}>

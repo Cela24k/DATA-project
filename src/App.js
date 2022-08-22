@@ -9,7 +9,6 @@ import {
 import "./App.css";
 import ThreeScene from "./Components/ThreeScene";
 import Info from "./Components/Info";
-import { sceneText } from "./Components/ThreeScene";
 import Navigation from "./Components/Navigation";
 import Banner from "./Components/Banner";
 
@@ -30,7 +29,13 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/info' element={<Info />} />
+        <Route path='/info' element={
+          <div className="App">
+            <Banner type="info"/>
+            <ThreeScene />
+            <Info />
+          </div>
+        } />
         <Route path='/' element={
           <div className="App">
             <Banner type="app"/>

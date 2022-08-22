@@ -22,6 +22,7 @@ class ThreeScene extends Component {
             opacity: 100,
             showHelper:true,
         };
+
     }
 
     componentDidMount() {
@@ -246,7 +247,7 @@ class ThreeScene extends Component {
                 
                 myobj.rotation.z += Math.PI;
                 this.setState({ infoText: myobj.name })
-                sceneText.text = this.state.infoText;
+                
             }
         }
         catch (error) {
@@ -312,12 +313,9 @@ class ThreeScene extends Component {
     }
 }
 
-export var sceneText = {
-    text : 'ciao',
-    getText: function(){
-        return this.text;
-    }
-} 
+export function cardText(){
+    return 
+}
 
 const status = {
     radius: 4,
