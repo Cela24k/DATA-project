@@ -10,7 +10,7 @@ import { Vector3 } from "three";
 import Helper  from "./Helper";
 
 class ThreeScene extends Component {
-
+    
     constructor() {
         super();
         this.state = {
@@ -41,7 +41,6 @@ class ThreeScene extends Component {
         });
         this.renderer.autoClear=false;
         this.renderer.setClearColor(0x000000, 0.0);
-        console.log(window.innerHeight, window.innerWidth);
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.mount.appendChild(this.renderer.domElement);
         this.camera = new THREE.PerspectiveCamera(50, window.innerHeight / window.innerWidth, 0.1, 1000);
@@ -302,7 +301,7 @@ class ThreeScene extends Component {
         else helperPanel = null;
 
         return (
-            <div id="render" style={{opacity:s, position:"absolute", top:"40px"}}>
+            <div id="render" style={{opacity:s}}>
                 <div
                     ref={mount => {
                         this.mount = mount;

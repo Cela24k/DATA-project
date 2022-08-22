@@ -22,13 +22,14 @@ render(){
                      position:"fixed", 
                      bottom:"100px"}}>
             <div style={{width:"10rem"}}>
-                <FontAwesomeIcon icon={faArrowLeftLong}></FontAwesomeIcon>
+                {/*<FontAwesomeIcon icon={faArrowLeftLong}></FontAwesomeIcon>*/}
+                <span className="material-icons">arrow_back</span>
             </div>
             <div style={{width:"5rem",height:"1.5rem", border:"2px solid", borderRadius:"16px", display:"flex",alignItems:"center",justifyContent:"center"}}>
-                <FontAwesomeIcon icon={faChevronDown}></FontAwesomeIcon>
+                <span className="material-icons">expand_more</span>
             </div>
             <div style={{width:"10rem"}}>
-                <FontAwesomeIcon icon={faArrowRightLong}></FontAwesomeIcon>
+                <span className="material-icons">arrow_forward</span>
             </div>
         </div>
     )
