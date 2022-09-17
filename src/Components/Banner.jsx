@@ -5,20 +5,23 @@ import {
     Route,
     Link
 } from "react-router-dom";
+import { getText } from "./ThreeScene";
+
 class Banner extends Component {
     constructor() {
         super();
         this.state = {
             location: window.location.href.split('/').pop(),
-            text: ''
+            text: getText()
         }
-
-        this.updateStyle = this.updateStyle.bind(this)
+        this.updateStyle = this.updateStyle.bind(this);
+        // this.setState({text: getText()})
     }
 
     componentDidMount() {
         console.log(window.location.href.split('/').pop());
         this.setState({ location: window.location.href.split('/').pop() });
+        setInterval(()=>{ this.setState({text: getText().name })},200);
     }
 
     // componentDidUpdate(){
@@ -47,9 +50,9 @@ class Banner extends Component {
                 <nav>
                     <ul className="lista" style={{ padding: "inherit" }}>
                         {this.state.location ?
-                            <li><a className={"link_" + this.state.location} style={{ color: "grey", opacity:0 }} href="soundtrack">{'text'}, </a></li>
+                            <li><a className={"link_" + this.state.location} style={{ color: "grey", opacity:0 }} href="soundtrack">{this.state.text}, </a></li>
                             :
-                            <li><a className={"link_" + this.state.location} style={{ color: "grey" }} href="soundtrack">{'text'}, </a></li>
+                            <li><a className={"link_" + this.state.location} style={{ color: "grey" }} href="soundtrack">{this.state.text}, </a></li>
                         }
                         {this.state.location ?
                             <li> <a className={"link_" + this.state.location} style={{opacity:0}} href="clothing">Contact</a></li>

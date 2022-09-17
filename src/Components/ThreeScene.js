@@ -9,6 +9,12 @@ import { Line3 } from "three";
 import { Vector3 } from "three";
 import Helper  from "./Helper";
 
+var text = '';
+
+export function getText(){
+    return text
+}
+
 class ThreeScene extends Component {
     
     constructor() {
@@ -236,6 +242,9 @@ class ThreeScene extends Component {
         })
         try {
             if (objects.at(selected)) {
+                // console.log(objects.at(selected));
+                text = objects.at(selected);
+
                 const myobj = objects.at(selected)
                 let orientation = 0;
             
@@ -312,10 +321,6 @@ class ThreeScene extends Component {
         )
     }
 }
-
-// export function cardText(){
-//     return 
-// }
 
 const status = {
     radius: 4,
