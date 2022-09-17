@@ -21,6 +21,11 @@ class Banner extends Component {
         this.setState({ location: window.location.href.split('/').pop() });
     }
 
+    // componentDidUpdate(){
+    //     console.log('updated');
+    //     this.setState({ location: window.location.href.split('/').pop() });
+    // }
+
     updateStyle(url) {
         this.setState(prevState => ({
             location: url
@@ -28,9 +33,8 @@ class Banner extends Component {
     }
 
     render() {
-        // setTimeout(function(){this.setState({text: true})}, 1000);
         return (<div className={"banner_" + this.state.location}>
-            <div style={{ display: "flex" }}>
+            <div className="flex-container">
                 <div className={"logo_" + this.state.location}></div>
                 <div className="label">
                     <p style={{ marginBottom: '2px' }}>Welcome to Data, our digital archive</p>
@@ -43,20 +47,22 @@ class Banner extends Component {
                 <nav>
                     <ul className="lista" style={{ padding: "inherit" }}>
                         {this.state.location ?
-                            <li><a className={"link_" + this.state.location} style={{ color: "grey", zIndex:-1 }} href="soundtrack">{'text'}, </a></li>
+                            <li><a className={"link_" + this.state.location} style={{ color: "grey", opacity:0 }} href="soundtrack">{'text'}, </a></li>
                             :
                             <li><a className={"link_" + this.state.location} style={{ color: "grey" }} href="soundtrack">{'text'}, </a></li>
                         }
                         {this.state.location ?
-                            <li> <a className={"link_" + this.state.location} style={{zIndex:-1}} href="clothing">Contact</a></li>
+                            <li> <a className={"link_" + this.state.location} style={{opacity:0}} href="clothing">Contact</a></li>
                             :
-                            <li><a className={"link_" + this.state.location} style={{ color: "grey" }} href="soundtrack">{'text'}, </a></li>
+                            <li><a className={"link_" + this.state.location} style={{ color: "grey" }} href="soundtrack">Contact </a></li>
                         }
                         <li> <Link to="/info" className={"link_" + this.state.location} onClick={() => { this.updateStyle('info') }} >Info</Link></li>
                         {/* METTERE COMPONENT */}
                         <li> <div style={{ border: "2px solid", borderRadius: "20px", paddingLeft: "10px", paddingRight: "10px", marginLeft: "185px", width: "40px", color: "grey", textAlign: "initial" }}> EN </div> </li>
                         {this.state.location? 
-                            <span className="material-icons" style={{position:"absolute", right:0, top:-20}}>close</span> 
+                            <Link to='/'> 
+                                <span className="material-icons" style={{position:"absolute", color:"black", "margin-left": "25px",}} onClick={()=>{this.updateStyle('')}}>close</span> 
+                             </Link>
                             :
                             null
                         }

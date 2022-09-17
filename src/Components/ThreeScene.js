@@ -313,9 +313,9 @@ class ThreeScene extends Component {
     }
 }
 
-export function cardText(){
-    return 
-}
+// export function cardText(){
+//     return 
+// }
 
 const status = {
     radius: 4,
