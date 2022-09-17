@@ -23,24 +23,37 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
-const width = window.screen.width
+const width = window.screen.width;
 
 function App() {
+
+  const [panel, setPanel] = useState(false);
+
+  let handleCallback = (childData) => {
+    setPanel(true);
+    console.log(panel);
+  }
+
   return (
     <BrowserRouter>
       <Routes>
         <Route path='/info' element={
           <div className="App">
-            <Banner type="info"/>
+            <Banner type="info" />
             <ThreeScene />
             <Info />
           </div>
         } />
         <Route path='/' element={
           <div className="App">
-            <Banner type="app"/>
+            <Banner type="app" />
             <ThreeScene />
-            <Navigation />
+            <Navigation parentCallback={handleCallback} />
+            {panel === false ? null :
+              <div style={{ width: "90%", height: "100%", backgroundColor: "black" }}>
+                ciao
+              </div>
+            }
           </div>}
         />
       </Routes>

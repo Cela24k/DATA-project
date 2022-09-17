@@ -57,6 +57,7 @@ body,
     font-family: "Uncut Sans";
     background-color: black;
     max-width: 100%;
+    overflow-x: hidden;
 }
 
 .navbar {
@@ -66,14 +67,16 @@ body,
 .banner_{
     max-width: 100%;
     width: 100%;
-    height: auto;
+    height: 200px;
     top: 30px;
     position: fixed;
     z-index: 99;
     align-items: baseline;
     display: flex;
     padding: 3rem;
-    justify-content: space-evenly;
+    padding-left: 5%;
+    padding-right: 5%;
+    justify-content: space-between;
     box-sizing: inherit;
     font-size: 18px;
 }
@@ -81,14 +84,16 @@ body,
 .banner_info {
     max-width: 100%;
     width: 100%;
-    height: auto;
+    height: 200px;
     top:30px;
     position: fixed;
     z-index: 99;
     align-items: baseline;
     display: flex;
     padding: 3rem;
-    justify-content: space-evenly;
+    padding-left: 5%;
+    padding-right: 5%;
+    justify-content: space-between;
     box-sizing: inherit;
     font-size: 18px;
 }
@@ -223,4 +228,6 @@ canvas {
     box-sizing: inherit;
 }
 
-
+.flex-container{
+    display: flex;
+}

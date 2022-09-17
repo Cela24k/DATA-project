@@ -9,6 +9,10 @@ constructor(){
     }
 }
 
+onTrigger = (event) => {
+    this.props.parentCallback();
+    event.preventDefault();
+}
 
 render(){
     return(
@@ -23,7 +27,7 @@ render(){
                 <span className="material-icons">arrow_back</span>
             </div>
             <div style={{width:"5rem",height:"1.5rem", border:"2px solid", borderRadius:"16px", display:"flex",alignItems:"center",justifyContent:"center"}}>
-                <span className="material-icons">expand_more</span>
+                <span className="material-icons" onClick={this.onTrigger}>expand_more</span>
             </div>
             <div style={{width:"10rem"}}>
                 <span className="material-icons">arrow_forward</span>
