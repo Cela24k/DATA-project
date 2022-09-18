@@ -66,6 +66,11 @@ class ThreeScene extends Component {
         window.addEventListener("resize", this.handleWindowResize1);
         
         window.addEventListener('touchstart', ()=>{
+            //TODO 
+            
+            // setTimeout(()=>{this.setState({autoMoving: true})},5000);
+            // setTimeout(()=>{console.log('first')},1000);
+
             this.setState({autoMoving:false});
         })
         window.addEventListener("mousedown", ()=>{

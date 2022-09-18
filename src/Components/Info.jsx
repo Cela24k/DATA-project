@@ -34,7 +34,7 @@ class Info extends Component {
                             <p>Data is based in creativity and sharing is the key to our work.</p>
                         </div>
                         <div className="credits">
-                            <div className="credits-container" style={{ 'margin-top': '1.5em' }}>
+                            <div className="credits-container" style={{ 'marginTop': '1.5em' }}>
                                 <p className="header">Credits</p>
                                 <p className="text">Alessandro Celadon, Pietro Giacon, Michele Dal Ponte, Serena Bedin</p>
                             </div>

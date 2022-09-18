@@ -44,15 +44,15 @@ class Banner extends Component {
                     <p style={{ marginTop: '0', marginBottom: '0' }}>and personal space</p>
                 </div>
             </div>
-            <div class="divider">
+            <div className="divider">
             </div>
             <div className="section">
                 <nav>
                     <ul className="lista" style={{ padding: "inherit" }}>
                         {this.state.location ?
-                            <li><a className={"link_" + this.state.location} style={{ color: "grey", opacity:0 }} href="soundtrack">{this.state.text}, </a></li>
+                            <li><a className={"link_" + this.state.location} style={{ color: "grey", opacity:0 }} href="soundtrack">{this.state.text} </a></li>
                             :
-                            <li><a className={"link_" + this.state.location} style={{ color: "grey" }} href="soundtrack">{this.state.text}, </a></li>
+                            <li><a className={"link_" + this.state.location} style={{ color: "grey" }} href="soundtrack">{this.state.text} </a></li>
                         }
                         {this.state.location ?
                             <li> <a className={"link_" + this.state.location} style={{opacity:0}} href="clothing">Contact</a></li>
@@ -64,7 +64,7 @@ class Banner extends Component {
                         <li> <div style={{ border: "2px solid", borderRadius: "20px", paddingLeft: "10px", paddingRight: "10px", marginLeft: "185px", width: "40px", color: "grey", textAlign: "initial" }}> EN </div> </li>
                         {this.state.location? 
                             <Link to='/'> 
-                                <span className="material-icons" style={{position:"absolute", color:"black", "margin-left": "25px",}} onClick={()=>{this.updateStyle('')}}>close</span> 
+                                <span className="material-icons" style={{position:"absolute", color:"black", "marginLeft": "25px",}} onClick={()=>{this.updateStyle('')}}>close</span> 
                              </Link>
                             :
                             null
