@@ -11,7 +11,7 @@ import ThreeScene from "./Components/ThreeScene";
 import Info from "./Components/Info";
 import Navigation from "./Components/Navigation";
 import Banner from "./Components/Banner";
-import ScrollToTop from "react-scroll-to-top";
+import Music from "./Components/Music";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA3a1LIWTdxdfPwioq0tbsHlQxc2DIx23E",
@@ -49,12 +49,12 @@ function App() {
     // document.body.scrollTo({ top: 500, behavior: 'smooth' });
     // scrollToBottom();
 
-    setTimeout(()=>{
-      if(childData)
+    setTimeout(() => {
+      if (childData)
         scrollToBottom();
       else
         scrollToTop();
-    },50)
+    }, 50)
   }
 
 
@@ -74,8 +74,9 @@ function App() {
             <ThreeScene />
             <Navigation parentCallback={handleCallback} />
             {panel === false ? null :
-              <div style={{ width: "100%", height: "70%", backgroundColor: "black" }}>
-                ciao
+              <div id='music-container' style={{ width: "100%", height: "70%", backgroundColor: "black" }}>
+                <Music />
+
               </div>
             }
           </div>}

@@ -9,8 +9,6 @@ class Navigation extends Component {
         }
 
         window.addEventListener('scroll', (ev)=>{
-            console.log(ev);
-            console.log(document.body.scrollHeight);
             if(window.scrollY >= 400)
                 this.setState({opened: true});
             else 

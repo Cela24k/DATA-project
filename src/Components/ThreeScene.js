@@ -106,7 +106,7 @@ class ThreeScene extends Component {
        
         this.loadCards();
         this.addPlane();
-        this.envLight()
+        this.envLight();
         this.scene.add(this.camera);
         this.animation();
         this.renderer.render(this.scene, this.camera);
