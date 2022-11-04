@@ -24,6 +24,8 @@
     /* border: 1px solid red; */
     font-size: x-large;
     padding-right: 1em;
+    color: black;
+    background-color: white;
 }   
 
 .credits{
@@ -54,7 +56,8 @@
     top:50%;
     border: 1px solid white;
     font-size: 4vw;
-
+    color: black;
+    background-color: white;
 }
 
 .custom-div{

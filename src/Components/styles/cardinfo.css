@@ -1,0 +1,12 @@
+.card{
+    position: absolute;
+    width: 45vw;
+    height: 25vw;
+    /* border: 1px solid white; */
+    top:20vh;
+    margin-right: 5vh;
+    right:0;
+    padding: 20px;
+    font-size: 200%;
+    opacity: 0.65;
+}

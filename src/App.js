@@ -57,6 +57,14 @@ function App() {
     }, 50)
   }
 
+  let handleCardScroll = (childData) => {
+    setTimeout(() => {
+      if (childData)
+        scrollToBottom();
+      else
+        scrollToTop();
+    }, 50)
+  }
 
   return (
     <BrowserRouter>
@@ -71,7 +79,7 @@ function App() {
         <Route path='/' element={
           <div className="App">
             <Banner type="app" />
-            <ThreeScene />
+            <ThreeScene scrollCallback={handleCardScroll}/>
             <Navigation parentCallback={handleCallback} />
             {panel === false ? null :
               <div id='music-container' style={{ width: "100%", height: "70%", backgroundColor: "black" }}>

@@ -7,26 +7,30 @@ import { Mesh } from "three";
 import { InteractionManager, InteractiveEvent } from "three.interactive";
 import { Line3 } from "three";
 import { Vector3 } from "three";
-import Helper  from "./Helper";
+import Helper from "./Helper";
+import CardInfo from "./CardInfo";
+import CardPanel from "./CardPanel";
 
 var text = '';
 
-export function getText(){
+export function getText() {
     return text
 }
 
 class ThreeScene extends Component {
-    
+
     constructor() {
         super();
         this.state = {
-            intro:0,
+            intro: 0,
             autoMoving: true,
-            translated:false,
+            translated: false,
             selected: 0,
             infoText: "ciao",
             opacity: 100,
-            showHelper:true,
+            showHelper: true,
+            cardOpened: false,
+            cardPanelOpened: false,
         };
 
     }
@@ -41,12 +45,12 @@ class ThreeScene extends Component {
 
         this.loader = new GLTFLoader();
         this.scene = new THREE.Scene();
-        this.scene.fog = new THREE.Fog(0x000000,3.5,15);
+        this.scene.fog = new THREE.Fog(0x000000, 3.5, 15);
         this.renderer = new THREE.WebGLRenderer({
             antialias: true,
-            alpha:true
+            alpha: true
         });
-        this.renderer.autoClear=false;
+        this.renderer.autoClear = false;
         this.renderer.setClearColor(0x000000, 0.0);
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.mount.appendChild(this.renderer.domElement);
@@ -61,30 +65,38 @@ class ThreeScene extends Component {
             this.camera,
             this.renderer.domElement
         );
-        
+
         window.addEventListener("load", this.handleWindowResize1());
         window.addEventListener("resize", this.handleWindowResize1);
-        
-        window.addEventListener('touchstart', ()=>{
-            //TODO 
-            
-            // setTimeout(()=>{this.setState({autoMoving: true})},5000);
-            // setTimeout(()=>{console.log('first')},1000);
 
-            this.setState({autoMoving:false});
+        window.addEventListener('touchstart', () => {
+            //TODO 
+            this.setState({ autoMoving: false });
+            // setTimeout(() => {
+            //     if (!this.state.autoMoving) {
+            //         console.log('ciao');
+            //         this.controls.autoRotate = true;
+            //         this.controls.rotateSpeed = 0.25;
+            //         this.setState({ autoMoving: true })
+            //     }
+            // }, 10000);
         })
-        window.addEventListener("mousedown", ()=>{
-            this.setState({autoMoving:false});
+        window.addEventListener("mousedown", () => {
+            // setTimeout(()=>{this.setState({autoMoving: true})},5000);
+
+            this.setState({ autoMoving: false });
             this.controls.autoRotate = false;
             this.lockedControls = true;
+            // this.setState({cardOpened: false});
         })
-        window.addEventListener("mouseup", ()=>{
+        window.addEventListener("mouseup", () => {
             this.lockedControls = false;
         })
-        window.addEventListener('scroll', function (e){
-            access.setState({
-                opacity: 100 - (window.scrollY/ 600) * 100 + "%"
-            })
+        window.addEventListener('scroll', function (e) {
+            if (!access.state.cardPanelOpened)
+                access.setState({
+                    opacity: 100 - (window.scrollY / 600) * 100 + "%"
+                })
 
         });
 
@@ -103,7 +115,7 @@ class ThreeScene extends Component {
         const axesHelper = new THREE.AxesHelper( 5 );
         this.scene.add( axesHelper );
         */
-       
+
         this.loadCards();
         this.addPlane();
         this.envLight();
@@ -111,7 +123,7 @@ class ThreeScene extends Component {
         this.animation();
         this.renderer.render(this.scene, this.camera);
     }
-    
+
     //FINE PREAMBOLO
 
     //mouseListener che si attiva quando premi su una carta per ruotare l'oggetto
@@ -136,7 +148,7 @@ class ThreeScene extends Component {
         for (let i = 0; i < count; i++) {
             loader.load(
                 "pics/" + i.toString() + ".jpg",
-                (texture) => this.loadElement(texture,scene,int,obj,i,count,geometry),
+                (texture) => this.loadElement(texture, scene, int, obj, i, count, geometry),
                 undefined,
                 function (err) {
                     console.error('An error happened loading a picture.');
@@ -145,8 +157,8 @@ class ThreeScene extends Component {
         }
     }
 
-    loadElement(texture,scene,int,obj,i,count,geometry) {
-        
+    loadElement(texture, scene, int, obj, i, count, geometry) {
+
         const material = new THREE.MeshBasicMaterial({
             color: "white",
             map: texture,
@@ -155,31 +167,47 @@ class ThreeScene extends Component {
         const mesh = new THREE.Mesh(geometry, material);
         const t = i / count * 2 * Math.PI;
 
-        mesh.name="nfts/test_image" + i.toString() + ".png"
+        mesh.name = "test_image" + i.toString() + ".png"
         mesh.position.x = Math.cos(t) * status.radius;
         mesh.position.z = Math.sin(t) * status.radius;
-        
-        
-        mesh.addEventListener("click", (event) =>{
-            if(this.lockedControls === false && this.controls.autoRotate === false && event.distance <= 3.65)
-            {
-                this.setState({showHelper:false})
-                if(!this.onFront){
-                    this.previousCoords = new Vector3(this.closest.position.x,this.closest.position.y,this.closest.position.z) 
-                    new Line3(this.closest.position,this.camera.position).getCenter(this.closest.position)
+
+
+        mesh.addEventListener("click", (event) => {
+            if (this.lockedControls === false && this.controls.autoRotate === false && event.distance <= 3.65) {
+                this.setState({ showHelper: false })
+                if (!this.onFront) {
+                    this.previousCoords = new Vector3(this.closest.position.x, this.closest.position.y, this.closest.position.z)
+                    new Line3(this.closest.position, this.camera.position).getCenter(this.closest.position)
                     this.controls.enableRotate = false;
                     this.onFront = true;
-                    this.scene.fog = new THREE.FogExp2(0x000000,0.2);
+                    this.scene.fog = new THREE.FogExp2(0x000000, 0.2);
+
+                    this.setState({ autoMoving: true });
+                    this.setState({ cardOpened: true });
+
+                    this.controls.autoRotate = true;
+                    this.controls.autoRotateSpeed = -3.0;
+
+
+                    setTimeout(() => {
+                        this.controls.autoRotate = false;
+                        this.controls.enableRotate = false;
+                    }, 500);
+
                 }
-                else{
+                else {
                     this.closest.position.x = this.previousCoords.x
                     this.closest.position.y = this.previousCoords.y
                     this.closest.position.z = this.previousCoords.z
                     this.controls.enableRotate = true;
-                    this.scene.fog = new THREE.Fog(0x000000,3.5,15);
+                    this.scene.fog = new THREE.Fog(0x000000, 3.5, 15);
                     this.onFront = false;
-                }  
-            } 
+
+                    this.setState({ autoMoving: true });
+                    this.setState({ cardOpened: false });
+
+                }
+            }
             event.stopPropagation();
         });
 
@@ -252,16 +280,16 @@ class ThreeScene extends Component {
 
                 const myobj = objects.at(selected)
                 let orientation = 0;
-            
-                this.angle = camera.position.angleTo(myobj.position)*180/Math.PI;
+
+                this.angle = camera.position.angleTo(myobj.position) * 180 / Math.PI;
                 this.closest = myobj;
 
                 orientation = this.closest.position.x * this.camera.position.z - this.closest.position.z * this.camera.position.x;
-                if(orientation > 0) this.angle *= -1;
-                
+                if (orientation > 0) this.angle *= -1;
+
                 myobj.rotation.z += Math.PI;
                 this.setState({ infoText: myobj.name })
-                
+
             }
         }
         catch (error) {
@@ -281,47 +309,50 @@ class ThreeScene extends Component {
     }
 
     handleWindowResize1 = () => {
-        this.camera.aspect = window.innerWidth / window.innerHeight ;
+        this.camera.aspect = window.innerWidth / window.innerHeight;
         this.camera.updateProjectionMatrix();
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.render(this.scene, this.camera);
     }
 
-    rotateToTarget(){
-        if(this.closest && !this.state.autoMoving){   
-            if(Math.floor(this.angle)!==0){
-                if(Math.floor(this.angle>0)){
-                    this.setState({showHelper:false})
-                    this.controls.autoRotateSpeed=2.0;
+    rotateToTarget() {
+        if (this.closest && !this.state.autoMoving) {
+            if (Math.floor(this.angle) !== 0) {
+                if (Math.floor(this.angle > 0)) {
+                    this.setState({ showHelper: false })
+                    this.controls.autoRotateSpeed = 2.0;
                     this.controls.autoRotate = true;
                 }
-                else{
-                    this.controls.autoRotateSpeed=-2.0;
+                else {
+                    this.controls.autoRotateSpeed = -2.0;
                     this.controls.autoRotate = true;
                 }
             }
-            else{
+            else {
                 this.controls.autoRotate = false;
             }
-        } 
+        }
     }
-
-    render() {  
+    handleCallback = (childData) => {
+        this.setState({ cardPanelOpened: true });
+        this.props.scrollCallback(true);
+    }
+    render() {
         const access = this;
         const s = this.state.opacity;
-        const helper = this.state.showHelper;
-        let helperPanel;
-
-        if(helper) helperPanel = (<Helper/>)
-        else helperPanel = null;
+        const helper = this.state.showHelper ? (<Helper />) : null;
+        const cardInfo = this.state.cardOpened ? (<CardInfo parentCallback={this.handleCallback} />) : null;
+        const cardPanel = this.state.cardPanelOpened ? (<CardPanel props={this.closest} />) : null;
 
         return (
-            <div id="render" style={{opacity:s}}>
+            <div className="scene" id="render" style={{ opacity: s }}>
                 <div
                     ref={mount => {
                         this.mount = mount;
                     }} />
-                {helperPanel}
+                {helper}
+                {cardInfo}
+                {cardPanel}
             </div>
         )
     }
@@ -329,7 +360,7 @@ class ThreeScene extends Component {
 
 const status = {
     radius: 4,
-    elements:20,
+    elements: 20,
 }
 const planeMat = new THREE.MeshStandardMaterial({
     side: THREE.DoubleSide,

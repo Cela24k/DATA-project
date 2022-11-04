@@ -87,7 +87,9 @@ body,
 .navbar {
     visibility: hidden;
 }
-
+.scena{
+    /* border: 1px solid green; */
+}
 .banner_ {
     max-width: 100%;
     width: 100%;
