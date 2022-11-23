@@ -196,18 +196,10 @@ class ThreeScene extends Component {
 
                 }
                 else {
-                    this.closest.position.x = this.previousCoords.x
-                    this.closest.position.y = this.previousCoords.y
-                    this.closest.position.z = this.previousCoords.z
-                    this.controls.enableRotate = true;
-                    this.scene.fog = new THREE.Fog(0x000000, 3.5, 15);
-                    this.onFront = false;
-
-                    this.setState({ autoMoving: true });
-                    this.setState({ cardOpened: false });
-
+                    this.disposeCard()
                 }
             }
+
             event.stopPropagation();
         });
 
@@ -247,6 +239,9 @@ class ThreeScene extends Component {
         this.scene.add(this.dlight)
     }
 
+
+    // rotates all cards facing perpendicular to the camera
+
     lookAtCamera() {
         const objects = this.objects
         const camera = this.camera;
@@ -255,6 +250,8 @@ class ThreeScene extends Component {
             obj.lookAt(camera.position)
         })
     }
+
+    // rotates the closest card
 
     processClosest() {
         const objects = this.objects;
@@ -315,8 +312,10 @@ class ThreeScene extends Component {
         this.renderer.render(this.scene, this.camera);
     }
 
+    //makes the orbit controls auto-rotate until the angle between the card and the camera is 0
+
     rotateToTarget() {
-        if (this.closest && !this.state.autoMoving) {
+        if (this.closest && !this.state.autoMoving && this.controls.enableRotate === true) {
             if (Math.floor(this.angle) !== 0) {
                 if (Math.floor(this.angle > 0)) {
                     this.setState({ showHelper: false })
@@ -333,12 +332,35 @@ class ThreeScene extends Component {
             }
         }
     }
-    handleCallback = (childData) => {
-        this.setState({ cardPanelOpened: true });
-        this.props.scrollCallback(true);
+
+    disposeCard() {
+        this.setState({ autoMoving: false, cardOpened: false, cardInfo: false, cardPanelOpened: false });
+        this.controls.enableRotate = true;
+        // this.controls.autoRotate = true;
+        // this.controls.autoRotateSpeed = +2.0
+        setTimeout(() => {
+            this.scene.fog = new THREE.Fog(0x000000, 3.5, 15);
+            this.onFront = false;
+            this.closest.position.x = this.previousCoords.x
+            this.closest.position.y = this.previousCoords.y
+            this.closest.position.z = this.previousCoords.z
+            this.controls.enableRotate = true;
+            this.controls.autoRotateSpeed = -0.4;
+            //remove panel 
+        }, 1000);
     }
+
+    handleCallback = (childData) => {
+        if (childData) {
+            this.setState({ cardPanelOpened: true });
+            this.props.scrollCallback(true);
+        }
+        else {
+            this.disposeCard()
+        }
+    }
+
     render() {
-        const access = this;
         const s = this.state.opacity;
         const helper = this.state.showHelper ? (<Helper />) : null;
         const cardInfo = this.state.cardOpened ? (<CardInfo parentCallback={this.handleCallback} />) : null;

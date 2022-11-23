@@ -17,6 +17,7 @@
     "firebase": "^9.4.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-responsive-image-grid": "^1.1.0",
     "react-router-dom": "^6.3.0",
     "react-scripts": "4.0.3",
     "react-scroll-to-top": "^3.0.0",

@@ -18,16 +18,19 @@ class CardInfo extends Component {
         //     this.props.parentCallback(true);
         // // this.setState({ opened: isOpen ? false : true });
         this.props.parentCallback(true);
-        console.log(event);
+        event.preventDefault();
+    }
 
+    clickOut = (event) =>{
+        this.props.parentCallback(false);
         event.preventDefault();
     }
 
     render() {
         return (
-            <div className="card">
-                <h1 style={{color:"white", textAlign:"center"}}>Sample Header</h1>
-                <i style={{color:"white", fontSize: "smaller"}}> Lorem ipsum dolor sit amet, 
+            <div className="card" >
+                <h1 style={{color:"white", textAlign:"center"}} onClick={this.clickOut}>Sample Header</h1>
+                <i style={{color:"white", fontSize: "smaller"}} onClick={this.clickOut}> Lorem ipsum dolor sit amet, 
                 consectetur adipiscing elit. Sed venenatis hendrerit orci, 
                 in mollis dolor maximus eget. Sed in accumsan felis, id maximus ipsum. 
                 Sed ornare dui id nibh vehicula fringilla. Pellentesque aliquam massa ac lorem ultricies hendrerit. 
